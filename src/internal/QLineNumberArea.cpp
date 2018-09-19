@@ -1,9 +1,9 @@
 // QCodeEditor
-#include <internal/QLineNumberArea.hpp>
-#include <internal/QCodeEditor.hpp>
+#include <QLineNumberArea>
+#include <QSyntaxStyle>
+#include <QCodeEditor>
 
 // Qt
-#include <QDebug>
 #include <QTextEdit>
 #include <QPainter>
 #include <QPaintEvent>
@@ -13,6 +13,7 @@
 
 QLineNumberArea::QLineNumberArea(QCodeEditor* parent) :
     QWidget(parent),
+    m_syntaxStyle(nullptr),
     m_codeEditParent(parent)
 {
 
@@ -38,20 +39,33 @@ QSize QLineNumberArea::sizeHint() const
     return QSize(space, 0);
 }
 
+void QLineNumberArea::setSyntaxStyle(QSyntaxStyle* style)
+{
+    m_syntaxStyle = style;
+}
+
+QSyntaxStyle* QLineNumberArea::syntaxStyle() const
+{
+    return m_syntaxStyle;
+}
+
 void QLineNumberArea::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
     // Clearing rect to update
-    painter.fillRect(event->rect(), Qt::lightGray);
+    painter.fillRect(
+        event->rect(),
+        m_syntaxStyle->getFormat("Text").background().color()
+    );
 
-    int blockNumber = m_codeEditParent->getFirstVisibleBlock();
-    auto block = m_codeEditParent->document()->findBlockByNumber(blockNumber);
-    int top = (int) m_codeEditParent->document()->documentLayout()->blockBoundingRect(block).translated(0, -m_codeEditParent->verticalScrollBar()->value()).top();
-    int bottom = top + (int) m_codeEditParent->document()->documentLayout()->blockBoundingRect(block).height();
+    auto blockNumber = m_codeEditParent->getFirstVisibleBlock();
+    auto block       = m_codeEditParent->document()->findBlockByNumber(blockNumber);
+    auto top         = (int) m_codeEditParent->document()->documentLayout()->blockBoundingRect(block).translated(0, -m_codeEditParent->verticalScrollBar()->value()).top();
+    auto bottom      = top + (int) m_codeEditParent->document()->documentLayout()->blockBoundingRect(block).height();
 
-    QColor currentLine(90, 255, 30); // Current line (custom green)
-    QColor otherLines = Qt::black;   // Other lines  (custom darkgrey)
+    auto currentLine = m_syntaxStyle->getFormat("CurrentLineNumber").foreground().color();
+    auto otherLines  = m_syntaxStyle->getFormat("LineNumber").foreground().color();
 
     painter.setFont(m_codeEditParent->font());
 
@@ -61,14 +75,8 @@ void QLineNumberArea::paintEvent(QPaintEvent* event)
         {
             QString number = QString::number(blockNumber + 1);
 
-            if (m_codeEditParent->textCursor().blockNumber() == blockNumber)
-            {
-                painter.setPen(currentLine);
-            }
-            else
-            {
-                painter.setPen(otherLines);
-            }
+            auto isCurrentLine = m_codeEditParent->textCursor().blockNumber() == blockNumber;
+            painter.setPen(isCurrentLine ? currentLine : otherLines);
 
             painter.drawText(
                 -5,

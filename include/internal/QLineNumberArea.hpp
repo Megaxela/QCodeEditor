@@ -1,8 +1,10 @@
 #pragma once
 
+// Qt
 #include <QWidget>
 
 class QCodeEditor;
+class QSyntaxStyle;
 
 /**
  * @brief Class, that describes line number area widget.
@@ -19,12 +21,30 @@ public:
      */
     explicit QLineNumberArea(QCodeEditor* parent=nullptr);
 
+    /**
+     * @brief Overridden method for getting line number area
+     * size.
+     */
     QSize sizeHint() const override;
+
+    /**
+     * @brief Method for setting syntax style object.
+     * @param style Pointer to syntax style.
+     */
+    void setSyntaxStyle(QSyntaxStyle* style);
+
+    /**
+     * @brief Method for getting syntax style.
+     * @return Pointer to syntax style.
+     */
+    QSyntaxStyle* syntaxStyle() const;
 
 protected:
     void paintEvent(QPaintEvent* event) override;
 
 private:
+
+    QSyntaxStyle* m_syntaxStyle;
 
     QCodeEditor* m_codeEditParent;
 

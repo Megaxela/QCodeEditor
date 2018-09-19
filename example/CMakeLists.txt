@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.6)
+project(QCodeEditorExample)
+
+set(CMAKE_CXX_STANDARD 17)
+
+set(CMAKE_AUTOMOC On)
+
+find_package(Qt5Core    CONFIG REQUIRED)
+find_package(Qt5Widgets CONFIG REQUIRED)
+find_package(Qt5Gui     CONFIG REQUIRED)
+
+add_executable(QCodeEditorExample
+    main.cpp
+)
+
+target_link_libraries(QCodeEditorExample
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::Gui
+    QCodeEditor
+)

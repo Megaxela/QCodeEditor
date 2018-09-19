@@ -1,15 +1,17 @@
 #pragma once
 
 // Qt
-#include <QSyntaxHighlighter>
+#include <QStyleSyntaxHighlighter>
 #include <QRegularExpression>
 #include <QVector>
+
+class QSyntaxStyle;
 
 /**
  * @brief Class, that describes C++ code
  * highlighter.
  */
-class QCXXHighlighter : public QSyntaxHighlighter
+class QCXXHighlighter : public QStyleSyntaxHighlighter
 {
 public:
 
@@ -19,32 +21,30 @@ public:
      */
     explicit QCXXHighlighter(QTextDocument* document=nullptr);
 
-private:
-
-    struct HighlightRule
-    {
-        QRegularExpression pattern;
-        QTextCharFormat format;
-    };
-
-    void prepareCommonKeywords();
-
-    void prepareStrings();
-
-    void prepareFunctions();
-
-    void prepareComments();
-
 protected:
     void highlightBlock(const QString& text) override;
 
 private:
 
+    struct HighlightRule
+    {
+        QRegularExpression pattern;
+        QString formatName;
+    };
+
+    void prepareCommonKeywords();
+
+    void preparePrimitiveTypes();
+
+    void prepareComments();
+
     QVector<HighlightRule> m_highlightRules;
+
+    QRegularExpression m_includePattern;
+    QRegularExpression m_functionPattern;
+    QRegularExpression m_defTypePattern;
 
     QRegularExpression m_commentStartPattern;
     QRegularExpression m_commentEndPattern;
-
-    QTextCharFormat m_commentFormat;
 };
 
