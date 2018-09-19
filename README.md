@@ -8,24 +8,24 @@ It's widget for editing/viewing code.
 0. Qt 5.
 
 ## Abilities
-0. Auto parentheses.
-0. Different highlight rules.
-0. Auto indentation.
-0. Replace tabs with spaces.
-0. C++ highlight rules.
-0. Qt Creator styles.
+1. Auto parentheses.
+1. Different highlight rules.
+1. Auto indentation.
+1. Replace tabs with spaces.
+1. C++ highlight rules.
+1. Qt Creator styles.
 
 ## Build
 It's CMake based library so it can be used as submodule. (See example)
 But here is the steps to build it as static library (for external use for example).
 
-0. Clone repo: `git clone https://github.com/Megaxela/QCodeEditor`
-0. Go into repo: `cd QCodeEditor`
-0. Create build folder: `mkdir build`
-0. Go into build folder: `cd build`
-0. Generate build file for your compiler: `cmake ..`
-    0. If you need to build example, specify `-DBUILD_EXAMPLE=On` on this step.
-0. Build library: `cmake --build .`
+1. Clone repo: `git clone https://github.com/Megaxela/QCodeEditor`
+1. Go into repo: `cd QCodeEditor`
+1. Create build folder: `mkdir build`
+1. Go into build folder: `cd build`
+1. Generate build file for your compiler: `cmake ..`
+    1. If you need to build example, specify `-DBUILD_EXAMPLE=On` on this step.
+1. Build library: `cmake --build .`
 
 ## Example
 
