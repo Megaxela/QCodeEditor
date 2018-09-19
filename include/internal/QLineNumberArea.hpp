@@ -21,6 +21,10 @@ public:
      */
     explicit QLineNumberArea(QCodeEditor* parent=nullptr);
 
+    // Disable copying
+    QLineNumberArea(const QLineNumberArea&) = delete;
+    QLineNumberArea& operator=(const QLineNumberArea&) = delete;
+
     /**
      * @brief Overridden method for getting line number area
      * size.

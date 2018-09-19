@@ -4,26 +4,14 @@
 
 
 QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
-    QStyleSyntaxHighlighter(document)
+    QStyleSyntaxHighlighter(document),
+    m_highlightRules     (),
+    m_includePattern     (QRegularExpression(R"(#include\s+([<"][a-zA-Z0-9*._]+[">]))")),
+    m_functionPattern    (QRegularExpression(R"(\b([A-Za-z0-9_]+(?:\s+|::))*([A-Za-z0-9_]+)(?=\())")),
+    m_defTypePattern     (QRegularExpression(R"(\b([A-Za-z0-9_]+)\s+[A-Za-z]{1}[A-Za-z0-9_]+\s*[;=])")),
+    m_commentStartPattern(QRegularExpression(R"(/\*)")),
+    m_commentEndPattern  (QRegularExpression(R"(\*/)"))
 {
-//    prepareCommonKeywords();
-//    prepareStrings();
-//    prepareFunctions();
-//    prepareComments();
-//
-//    QTextCharFormat format;
-//
-//    format.setForeground(Qt::blue);
-//
-//    m_highlightRules.append({
-//        QRegularExpression("#[a-zA-Z_]+\\s"),
-//        format
-//    });
-//
-    m_includePattern = QRegularExpression(R"(#include\s+([<"][a-zA-Z0-9*._]+[">]))");
-    m_functionPattern = QRegularExpression(R"(\b([A-Za-z0-9_]+(?:\s+|::))*([A-Za-z0-9_]+)(?=\())");
-    m_defTypePattern = QRegularExpression(R"(\b([A-Za-z0-9_]+)\s+[A-Za-z]{1}[A-Za-z0-9_]+\s*[;=])");
-
     // Numbers
     m_highlightRules.append({
         QRegularExpression(R"(\b(0b|0x){0,1}\d+\b)"),
@@ -107,9 +95,6 @@ void QCXXHighlighter::prepareComments()
         QRegularExpression("//[^\n]*"),
         "Comment"
     });
-
-    m_commentStartPattern = QRegularExpression(R"(/\*)");
-    m_commentEndPattern   = QRegularExpression(R"(\*/)");
 }
 
 void QCXXHighlighter::highlightBlock(const QString& text)

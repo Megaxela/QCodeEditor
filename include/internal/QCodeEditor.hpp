@@ -21,6 +21,10 @@ public:
      */
     explicit QCodeEditor(QWidget* widget=nullptr);
 
+    // Disable copying
+    QCodeEditor(const QCodeEditor&) = delete;
+    QCodeEditor& operator=(const QCodeEditor&) = delete;
+
     /**
      * @brief Method for getting first visible block
      * index.

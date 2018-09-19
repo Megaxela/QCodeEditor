@@ -19,6 +19,10 @@ public:
      */
     explicit QStyleSyntaxHighlighter(QTextDocument* document=nullptr);
 
+    // Disable copying
+    QStyleSyntaxHighlighter(const QStyleSyntaxHighlighter&) = delete;
+    QStyleSyntaxHighlighter& operator=(const QStyleSyntaxHighlighter&) = delete;
+
     /**
      * @brief Method for setting syntax style.
      * @param style Pointer to syntax style.

@@ -28,6 +28,16 @@ private:
 
     struct HighlightRule
     {
+        HighlightRule() :
+            pattern(),
+            formatName()
+        {}
+
+        HighlightRule(QRegularExpression p, QString f) :
+            pattern(std::move(p)),
+            formatName(std::move(f))
+        {}
+
         QRegularExpression pattern;
         QString formatName;
     };
