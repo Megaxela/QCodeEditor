@@ -12,6 +12,8 @@ It's widget for editing/viewing code.
 1. Different highlight rules.
 1. Auto indentation.
 1. Replace tabs with spaces.
+1. GLSL Completion rules.
+1. GLSL highlight rules.
 1. C++ highlight rules.
 1. Qt Creator styles.
 
@@ -33,7 +35,7 @@ By default `QCodeEditor` uses standard QtCreator theme. But you may specify
 you own by parsing it with `QSyntaxStyle`. Example uses [Dracula](https://draculatheme.com) theme.
 (See example for more) 
 
-<img src="https://github.com/Megaxela/QCodeEditor/blob/master/example/preview.png">
+<img src="https://github.com/Megaxela/QCodeEditor/blob/master/example/image/preview.png">
 
 ## LICENSE
 

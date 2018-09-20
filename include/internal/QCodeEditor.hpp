@@ -152,6 +152,8 @@ protected:
 
 private:
 
+    void updateLineGeometry();
+
     /**
      * @brief Method, that performs completer processing.
      * Returns true if event has to be dropped.

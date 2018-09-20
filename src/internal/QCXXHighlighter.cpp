@@ -38,9 +38,9 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
         for (auto&& name : names)
         {
             m_highlightRules.append({
-                                        QRegularExpression(QString(R"(\b%1\b)").arg(name)),
-                                        key
-                                    });
+                QRegularExpression(QString(R"(\b%1\b)").arg(name)),
+                key
+            });
         }
     }
 

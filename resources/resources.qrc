@@ -1,6 +1,8 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
+        <file>default_style.xml</file>
         <file>languages/glsl.xml</file>
+        <file>languages/cpp.xml</file>
     </qresource>
 </RCC>

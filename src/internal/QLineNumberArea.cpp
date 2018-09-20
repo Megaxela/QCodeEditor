@@ -36,7 +36,7 @@ QSize QLineNumberArea::sizeHint() const
 
     int space = 13 + m_codeEditParent->fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
-    return QSize(space, 0);
+    return {space, 0};
 }
 
 void QLineNumberArea::setSyntaxStyle(QSyntaxStyle* style)
@@ -81,7 +81,7 @@ void QLineNumberArea::paintEvent(QPaintEvent* event)
             painter.drawText(
                 -5,
                 top,
-                width(),
+                sizeHint().width(),
                 m_codeEditParent->fontMetrics().height(),
                 Qt::AlignRight,
                 number

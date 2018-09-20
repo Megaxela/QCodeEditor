@@ -70,6 +70,11 @@ QCodeEditor::QCodeEditor(QWidget* widget) :
 
 void QCodeEditor::setHighlighter(QStyleSyntaxHighlighter* highlighter)
 {
+    if (m_highlighter)
+    {
+        m_highlighter->setDocument(nullptr);
+    }
+
     m_highlighter = highlighter;
 
     if (m_highlighter)
@@ -124,14 +129,27 @@ void QCodeEditor::updateStyle()
 
         setPalette(currentPalette);
     }
+
+    updateExtraSelection();
 }
 
 void QCodeEditor::resizeEvent(QResizeEvent* e)
 {
     QTextEdit::resizeEvent(e);
 
+    updateLineGeometry();
+}
+
+void QCodeEditor::updateLineGeometry()
+{
     QRect cr = contentsRect();
-    m_lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), m_lineNumberArea->sizeHint().width(), cr.height()));
+    m_lineNumberArea->setGeometry(
+        QRect(cr.left(),
+              cr.top(),
+              m_lineNumberArea->sizeHint().width(),
+              cr.height()
+        )
+    );
 }
 
 void QCodeEditor::updateLineNumberAreaWidth(int)
@@ -141,10 +159,18 @@ void QCodeEditor::updateLineNumberAreaWidth(int)
 
 void QCodeEditor::updateLineNumberArea(const QRect& rect)
 {
-    m_lineNumberArea->update(0, rect.y(), m_lineNumberArea->width(), rect.height());
+    m_lineNumberArea->update(
+        0,
+        rect.y(),
+        m_lineNumberArea->sizeHint().width(),
+        rect.height()
+    );
+    updateLineGeometry();
 
     if (rect.contains(viewport()->rect()))
+    {
         updateLineNumberAreaWidth(0);
+    }
 }
 
 void QCodeEditor::updateExtraSelection()
@@ -535,7 +561,6 @@ void QCodeEditor::insertCompletion(QString s)
 
     auto tc = textCursor();
     tc.select(QTextCursor::SelectionType::WordUnderCursor);
-//    tc.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
     tc.insertText(s);
     setTextCursor(tc);
 }

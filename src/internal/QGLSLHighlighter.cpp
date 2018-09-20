@@ -74,21 +74,6 @@ QGLSLHighlighter::QGLSLHighlighter(QTextDocument* document) :
 
 void QGLSLHighlighter::highlightBlock(const QString& text)
 {
-    for (auto& rule : m_highlightRules)
-    {
-        auto matchIterator = rule.pattern.globalMatch(text);
-
-        while (matchIterator.hasNext())
-        {
-            auto match = matchIterator.next();
-
-            setFormat(
-                match.capturedStart(),
-                match.capturedLength(),
-                syntaxStyle()->getFormat(rule.formatName)
-            );
-        }
-    }
 
     {
         auto matchIterator = m_includePattern.globalMatch(text);
@@ -128,6 +113,22 @@ void QGLSLHighlighter::highlightBlock(const QString& text)
                 match.capturedStart(2),
                 match.capturedLength(2),
                 syntaxStyle()->getFormat("Function")
+            );
+        }
+    }
+
+    for (auto& rule : m_highlightRules)
+    {
+        auto matchIterator = rule.pattern.globalMatch(text);
+
+        while (matchIterator.hasNext())
+        {
+            auto match = matchIterator.next();
+
+            setFormat(
+                match.capturedStart(),
+                match.capturedLength(),
+                syntaxStyle()->getFormat(rule.formatName)
             );
         }
     }
