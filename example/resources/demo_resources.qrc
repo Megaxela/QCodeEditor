@@ -4,5 +4,6 @@
         <file>styles/drakula.xml</file>
         <file>code_samples/cxx.cpp</file>
         <file>code_samples/shader.glsl</file>
+        <file>code_samples/xml.xml</file>
     </qresource>
 </RCC>

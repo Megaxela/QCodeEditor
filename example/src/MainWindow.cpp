@@ -7,6 +7,7 @@
 #include <QSyntaxStyle>
 #include <QCXXHighlighter>
 #include <QGLSLHighlighter>
+#include <QXMLHighlighter>
 
 // Qt
 #include <QComboBox>
@@ -45,7 +46,8 @@ void MainWindow::initData()
 {
     m_codeSamples = {
         {"C++",  loadCode(":/code_samples/cxx.cpp")},
-        {"GLSL", loadCode(":/code_samples/shader.glsl")}
+        {"GLSL", loadCode(":/code_samples/shader.glsl")},
+        {"XML",  loadCode(":/code_samples/xml.xml")}
     };
 
     m_completers = {
@@ -55,8 +57,9 @@ void MainWindow::initData()
 
     m_highlighters = {
         {"None", nullptr},
-        {"C++", new QCXXHighlighter},
-        {"GLSL", new QGLSLHighlighter}
+        {"C++",  new QCXXHighlighter},
+        {"GLSL", new QGLSLHighlighter},
+        {"XML",  new QXMLHighlighter}
     };
 
     m_styles = {

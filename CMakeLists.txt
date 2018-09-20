@@ -15,10 +15,16 @@ set(RESOURCES_FILE
 )
 
 set(INCLUDE_FILES
+    include/QHighlightRule
     include/QCodeEditor
+    include/QCXXHighlighter
     include/QLineNumberArea
     include/QStyleSyntaxHighlighter
     include/QSyntaxStyle
+    include/QGLSLCompleter
+    include/QGLSLHighlighter
+    include/QLanguage
+    include/QXMLHighlighter
     include/internal/QHighlightRule.hpp
     include/internal/QCodeEditor.hpp
     include/internal/QCXXHighlighter.hpp
@@ -28,6 +34,7 @@ set(INCLUDE_FILES
     include/internal/QGLSLCompleter.hpp
     include/internal/QGLSLHighlighter.hpp
     include/internal/QLanguage.hpp
+    include/internal/QXMLHighlighter.hpp
 )
 
 set(SOURCE_FILES
@@ -39,6 +46,7 @@ set(SOURCE_FILES
     src/internal/QGLSLCompleter.cpp
     src/internal/QGLSLHighlighter.cpp
     src/internal/QLanguage.cpp
+    src/internal/QXMLHighlighter.cpp
 )
 
 # Create code for QObjects
