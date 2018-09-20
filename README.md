@@ -12,7 +12,7 @@ It's widget for editing/viewing code.
 1. Different highlight rules.
 1. Auto indentation.
 1. Replace tabs with spaces.
-1. GLSL Completion rules.
+1. GLSL completion rules.
 1. GLSL highlight rules.
 1. C++ highlight rules.
 1. Qt Creator styles.
