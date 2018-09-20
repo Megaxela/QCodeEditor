@@ -15,6 +15,8 @@ It's widget for editing/viewing code.
 1. GLSL completion rules.
 1. GLSL highlight rules.
 1. C++ highlight rules.
+1. XML highlight rules.
+1. JSON highligh rules.
 1. Qt Creator styles.
 
 ## Build
