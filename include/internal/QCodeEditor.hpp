@@ -1,7 +1,7 @@
 #pragma once
 
 // Qt
-#include <QTextEdit>
+#include <QTextEdit> // Required for inheritance
 
 class QCompleter;
 class QLineNumberArea;
@@ -35,7 +35,7 @@ public:
 
     /**
      * @brief Method for setting highlighter.
-     * @param highlighter Pointer to syntex highlighter.
+     * @param highlighter Pointer to syntax highlighter.
      */
     void setHighlighter(QStyleSyntaxHighlighter* highlighter);
 
@@ -140,6 +140,8 @@ public slots:
     void updateStyle();
 
 protected:
+    void insertFromMimeData(const QMimeData* source) override;
+
     void paintEvent(QPaintEvent* e) override;
 
     void resizeEvent(QResizeEvent* e) override;

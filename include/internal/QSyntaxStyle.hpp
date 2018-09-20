@@ -1,6 +1,7 @@
 #pragma once
 
 // Qt
+#include <QObject> // Required for inheritance
 #include <QMap>
 #include <QString>
 #include <QTextCharFormat>
@@ -9,14 +10,17 @@
  * @brief Class, that describes Qt style
  * parser for QCodeEditor.
  */
-class QSyntaxStyle
+class QSyntaxStyle : public QObject
 {
+    Q_OBJECT
+
 public:
 
     /**
      * @brief Constructor.
+     * @param parent Pointer to parent QObject
      */
-    QSyntaxStyle();
+    explicit QSyntaxStyle(QObject* parent=nullptr);
 
     /**
      * @brief Method for loading and parsing
@@ -25,6 +29,12 @@ public:
      * @return Success.
      */
     bool load(QString fl);
+
+    /**
+     * @brief Method for getting style name.
+     * @return Name.
+     */
+    QString name() const;
 
     /**
      * @brief Method for checking is syntax style loaded.
@@ -47,6 +57,8 @@ public:
     static QSyntaxStyle* defaultStyle();
 
 private:
+
+    QString m_name;
 
     QMap<
         QString,

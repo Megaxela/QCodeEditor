@@ -16,6 +16,7 @@
 #include <QAbstractItemView>
 #include <QShortcut>
 #include <QDebug>
+#include <QMimeData>
 
 
 static QVector<QPair<QString, QString>> parentheses = {
@@ -331,19 +332,17 @@ bool QCodeEditor::proceedCompleterBegin(QKeyEvent *e)
     // todo: Replace with modifiable QShortcut
     auto isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space);
 
-    if (!m_completer || !isShortcut)
-    {
-        return false;
-    }
+    return !(!m_completer || !isShortcut);
 
-    return true;
 }
 
 void QCodeEditor::proceedCompleterEnd(QKeyEvent *e)
 {
     auto ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
 
-    if (!m_completer || (ctrlOrShift && e->text().isEmpty()))
+    if (!m_completer ||
+        (ctrlOrShift && e->text().isEmpty()) ||
+        e->key() == Qt::Key_Delete)
     {
         return;
     }
@@ -374,8 +373,6 @@ void QCodeEditor::proceedCompleterEnd(QKeyEvent *e)
         m_completer->popup()->verticalScrollBar()->sizeHint().width()
     );
 
-    qDebug() << "Showing completer at " << cursRect;
-
     m_completer->complete(cursRect);
 }
 
@@ -383,15 +380,15 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e)
 {
     auto completerSkip = proceedCompleterBegin(e);
 
-    if (m_replaceTab && e->key() == Qt::Key_Tab)
-    {
-        e->ignore();
-        insertPlainText(m_tabReplace);
-        return;
-    }
-
     if (!completerSkip)
     {
+        if (m_replaceTab && e->key() == Qt::Key_Tab)
+        {
+            e->ignore();
+            insertPlainText(m_tabReplace);
+            return;
+        }
+
         // Auto indentation
         int indentationLevel = 0;
         if (m_autoIndentation && e->key() == Qt::Key_Return)
@@ -509,7 +506,7 @@ void QCodeEditor::setCompleter(QCompleter *completer)
     }
 
     m_completer->setWidget(this);
-    m_completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+    m_completer->setCompletionMode(QCompleter::CompletionMode::PopupCompletion);
 
     connect(
         m_completer,
@@ -537,10 +534,9 @@ void QCodeEditor::insertCompletion(QString s)
     }
 
     auto tc = textCursor();
-    auto extra = s.length() - m_completer->completionPrefix().length();
-    tc.movePosition(QTextCursor::Left);
-    tc.movePosition(QTextCursor::EndOfWord);
-    tc.insertText(s.right(extra));
+    tc.select(QTextCursor::SelectionType::WordUnderCursor);
+//    tc.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+    tc.insertText(s);
     setTextCursor(tc);
 }
 
@@ -570,4 +566,9 @@ QString QCodeEditor::textUnderCursor() const
     auto tc = textCursor();
     tc.select(QTextCursor::WordUnderCursor);
     return tc.selectedText();
+}
+
+void QCodeEditor::insertFromMimeData(const QMimeData* source)
+{
+    insertPlainText(source->text());
 }

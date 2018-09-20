@@ -11,10 +11,10 @@
 class QSyntaxStyle;
 
 /**
- * @brief Class, that describes C++ code
+ * @brief Class, that describes Glsl code
  * highlighter.
  */
-class QCXXHighlighter : public QStyleSyntaxHighlighter
+class QGLSLHighlighter : public QStyleSyntaxHighlighter
 {
 public:
 
@@ -22,7 +22,7 @@ public:
      * @brief Constructor.
      * @param document Pointer to document.
      */
-    explicit QCXXHighlighter(QTextDocument* document=nullptr);
+    explicit QGLSLHighlighter(QTextDocument* document=nullptr);
 
 protected:
     void highlightBlock(const QString& text) override;

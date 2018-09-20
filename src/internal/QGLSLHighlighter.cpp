@@ -1,13 +1,13 @@
 // QCodeEditor
-#include <QCXXHighlighter>
-#include <QSyntaxStyle>
+#include <QGLSLHighlighter>
 #include <QLanguage>
+#include <QSyntaxStyle>
 
 // Qt
 #include <QFile>
+#include <QDebug>
 
-
-QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
+QGLSLHighlighter::QGLSLHighlighter(QTextDocument* document) :
     QStyleSyntaxHighlighter(document),
     m_highlightRules     (),
     m_includePattern     (QRegularExpression(R"(#include\s+([<"][a-zA-Z0-9*._]+[">]))")),
@@ -17,7 +17,7 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
     m_commentEndPattern  (QRegularExpression(R"(\*/)"))
 {
     Q_INIT_RESOURCE(resources);
-    QFile fl(":/languages/cpp.xml");
+    QFile fl(":/languages/glsl.xml");
 
     if (!fl.open(QIODevice::ReadOnly))
     {
@@ -38,12 +38,15 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
         for (auto&& name : names)
         {
             m_highlightRules.append({
-                                        QRegularExpression(QString(R"(\b%1\b)").arg(name)),
-                                        key
-                                    });
+                QRegularExpression(QString(R"(\b%1\b)").arg(name)),
+                key
+            });
         }
     }
 
+    // Following rules has higher priority to display
+    // than language specific keys
+    // So they must be applied at last.
     // Numbers
     m_highlightRules.append({
         QRegularExpression(R"(\b(0b|0x){0,1}[\d.']+\b)"),
@@ -69,9 +72,24 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
     });
 }
 
-void QCXXHighlighter::highlightBlock(const QString& text)
+void QGLSLHighlighter::highlightBlock(const QString& text)
 {
-    // Checking for include
+    for (auto& rule : m_highlightRules)
+    {
+        auto matchIterator = rule.pattern.globalMatch(text);
+
+        while (matchIterator.hasNext())
+        {
+            auto match = matchIterator.next();
+
+            setFormat(
+                match.capturedStart(),
+                match.capturedLength(),
+                syntaxStyle()->getFormat(rule.formatName)
+            );
+        }
+    }
+
     {
         auto matchIterator = m_includePattern.globalMatch(text);
 
@@ -110,36 +128,6 @@ void QCXXHighlighter::highlightBlock(const QString& text)
                 match.capturedStart(2),
                 match.capturedLength(2),
                 syntaxStyle()->getFormat("Function")
-            );
-        }
-    }
-    {
-        auto matchIterator = m_defTypePattern.globalMatch(text);
-
-        while (matchIterator.hasNext())
-        {
-            auto match = matchIterator.next();
-
-            setFormat(
-                match.capturedStart(1),
-                match.capturedLength(1),
-                syntaxStyle()->getFormat("Type")
-            );
-        }
-    }
-
-    for (auto& rule : m_highlightRules)
-    {
-        auto matchIterator = rule.pattern.globalMatch(text);
-
-        while (matchIterator.hasNext())
-        {
-            auto match = matchIterator.next();
-
-            setFormat(
-                match.capturedStart(),
-                match.capturedLength(),
-                syntaxStyle()->getFormat(rule.formatName)
             );
         }
     }

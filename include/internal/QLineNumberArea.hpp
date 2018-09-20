@@ -1,7 +1,7 @@
 #pragma once
 
 // Qt
-#include <QWidget>
+#include <QWidget> // Required for inheritance
 
 class QCodeEditor;
 class QSyntaxStyle;

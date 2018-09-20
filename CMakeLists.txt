@@ -10,16 +10,24 @@ if (${BUILD_EXAMPLE})
     add_subdirectory(example)
 endif()
 
+set(RESOURCES_FILE
+    resources/resources.qrc
+)
+
 set(INCLUDE_FILES
     include/QCodeEditor
     include/QLineNumberArea
     include/QStyleSyntaxHighlighter
     include/QSyntaxStyle
+    include/internal/QHighlightRule.hpp
     include/internal/QCodeEditor.hpp
     include/internal/QCXXHighlighter.hpp
     include/internal/QLineNumberArea.hpp
     include/internal/QStyleSyntaxHighlighter.hpp
     include/internal/QSyntaxStyle.hpp
+    include/internal/QGLSLCompleter.hpp
+    include/internal/QGLSLHighlighter.hpp
+    include/internal/QLanguage.hpp
 )
 
 set(SOURCE_FILES
@@ -28,17 +36,24 @@ set(SOURCE_FILES
     src/internal/QCXXHighlighter.cpp
     src/internal/QSyntaxStyle.cpp
     src/internal/QStyleSyntaxHighlighter.cpp
-        src/QGLSLCompleter.cpp include/internal/QGLSLCompleter.hpp)
+    src/internal/QGLSLCompleter.cpp
+    src/internal/QGLSLHighlighter.cpp
+    src/internal/QLanguage.cpp
+)
 
+# Create code for QObjects
 set(CMAKE_AUTOMOC On)
 
-# Find includes in corresponding build directories
+# Create code from resource files
+set(CMAKE_AUTORCC ON)
 
+# Find includes in corresponding build directories
 find_package(Qt5Core    CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
 find_package(Qt5Gui     CONFIG REQUIRED)
 
 add_library(QCodeEditor STATIC
+    ${RESOURCES_FILE}
     ${SOURCE_FILES}
     ${INCLUDE_FILES}
 )
