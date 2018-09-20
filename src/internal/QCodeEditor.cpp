@@ -17,6 +17,7 @@
 #include <QShortcut>
 #include <QDebug>
 #include <QMimeData>
+#include <internal/QCodeEditor.hpp>
 
 
 static QVector<QPair<QString, QString>> parentheses = {
@@ -408,32 +409,34 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e)
 
     if (!completerSkip)
     {
-        if (m_replaceTab && e->key() == Qt::Key_Tab)
+        if (m_replaceTab &&
+            e->key() == Qt::Key_Tab &&
+            e->modifiers() == Qt::NoModifier)
         {
-            e->ignore();
             insertPlainText(m_tabReplace);
             return;
         }
 
         // Auto indentation
-        int indentationLevel = 0;
-        if (m_autoIndentation && e->key() == Qt::Key_Return)
-        {
-            auto blockText = textCursor().block().text();
+        int indentationLevel = getTrailingSpaces();
 
-            for (auto i = 0;
-                 i < blockText.size() && QString("\t ").contains(blockText[i]);
-                 ++i)
-            {
-                if (blockText[i] == ' ')
-                {
-                    indentationLevel++;
-                }
-                else
-                {
-                    indentationLevel += tabStopWidth() / fontMetrics().averageCharWidth();
-                }
-            }
+        // Shortcut for moving line to left
+        if (m_replaceTab &&
+            e->key() == Qt::Key_Backtab)
+        {
+            indentationLevel = std::min(indentationLevel, m_tabReplace.size());
+
+            auto cursor = textCursor();
+
+            cursor.movePosition(QTextCursor::MoveOperation::StartOfLine);
+            cursor.movePosition(
+                QTextCursor::MoveOperation::Right,
+                QTextCursor::MoveMode::KeepAnchor,
+                indentationLevel
+            );
+
+            cursor.removeSelectedText();
+            return;
         }
 
         QTextEdit::keyPressEvent(e);
@@ -596,4 +599,27 @@ QString QCodeEditor::textUnderCursor() const
 void QCodeEditor::insertFromMimeData(const QMimeData* source)
 {
     insertPlainText(source->text());
+}
+
+int QCodeEditor::getTrailingSpaces()
+{
+    auto blockText = textCursor().block().text();
+
+    int indentationLevel = 0;
+
+    for (auto i = 0;
+         i < blockText.size() && QString("\t ").contains(blockText[i]);
+         ++i)
+    {
+        if (blockText[i] == ' ')
+        {
+            indentationLevel++;
+        }
+        else
+        {
+            indentationLevel += tabStopWidth() / fontMetrics().averageCharWidth();
+        }
+    }
+
+    return indentationLevel;
 }

@@ -179,6 +179,8 @@ private:
      */
     void highlightParenthesis(QList<QTextEdit::ExtraSelection>& extraSelection);
 
+    int getTrailingSpaces();
+
     QStyleSyntaxHighlighter* m_highlighter;
     QSyntaxStyle* m_syntaxStyle;
     QLineNumberArea* m_lineNumberArea;
