@@ -3,6 +3,7 @@
 // Qt
 #include <QTextEdit>
 
+class QCompleter;
 class QLineNumberArea;
 class QSyntaxStyle;
 class QStyleSyntaxHighlighter;
@@ -92,14 +93,50 @@ public:
      */
     bool autoIndentation() const;
 
+    /**
+     * @brief Method for setting completer.
+     * @param completer Pointer to completer object.
+     */
+    void setCompleter(QCompleter* completer);
+
+    /**
+     * @brief Method for getting completer.
+     * @return Pointer to completer.
+     */
+    QCompleter* completer() const;
+
 public slots:
 
+    /**
+     * @brief Slot, that performs insertion of
+     * completion info into code.
+     * @param s Data.
+     */
+    void insertCompletion(QString s);
+
+    /**
+     * @brief Slot, that performs update of
+     * internal editor viewport based on line
+     * number area width.
+     */
     void updateLineNumberAreaWidth(int);
 
+    /**
+     * @brief Slot, that performs update of some
+     * part of line number area.
+     * @param rect Area that has to be updated.
+     */
     void updateLineNumberArea(const QRect& rect);
 
+    /**
+     * @brief Slot, that will proceed extra selection
+     * for current cursor position.
+     */
     void updateExtraSelection();
 
+    /**
+     * @brief Slot, that will update editor style.
+     */
     void updateStyle();
 
 protected:
@@ -109,9 +146,22 @@ protected:
 
     void keyPressEvent(QKeyEvent* e) override;
 
+    void focusInEvent(QFocusEvent *e) override;
+
 private:
 
-    QChar getCharUnderCursor(int offset=0) const;
+    /**
+     * @brief Method, that performs completer processing.
+     * Returns true if event has to be dropped.
+     * @param e Pointer to key event.
+     * @return Shall event be dropped.
+     */
+    bool proceedCompleterBegin(QKeyEvent *e);
+    void proceedCompleterEnd(QKeyEvent* e);
+
+    QChar charUnderCursor(int offset = 0) const;
+
+    QString textUnderCursor() const;
 
     /**
      * @brief Method, that adds highlighting of
@@ -128,6 +178,7 @@ private:
     QStyleSyntaxHighlighter* m_highlighter;
     QSyntaxStyle* m_syntaxStyle;
     QLineNumberArea* m_lineNumberArea;
+    QCompleter* m_completer;
 
     bool m_autoIndentation;
     bool m_autoParentheses;

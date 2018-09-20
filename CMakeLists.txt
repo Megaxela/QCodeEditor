@@ -28,7 +28,7 @@ set(SOURCE_FILES
     src/internal/QCXXHighlighter.cpp
     src/internal/QSyntaxStyle.cpp
     src/internal/QStyleSyntaxHighlighter.cpp
-)
+        src/QGLSLCompleter.cpp include/internal/QGLSLCompleter.hpp)
 
 set(CMAKE_AUTOMOC On)
 

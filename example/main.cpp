@@ -8,6 +8,7 @@
 #include <QCodeEditor>
 #include <QCXXHighlighter>
 #include <QSyntaxStyle>
+#include <QGLSLCompleter>
 
 const char* codeSample = R"(
 /****************************************************************************
@@ -188,6 +189,7 @@ int main(int argc, char** argv)
     // Setting up
     editor->setSyntaxStyle(style);
     editor->setHighlighter(new QCXXHighlighter);
+    editor->setCompleter(new QGLSLCompleter(editor));
     editor->setWordWrapMode(QTextOption::NoWrap);
     editor->setPlainText(codeSample);
 

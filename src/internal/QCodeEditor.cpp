@@ -11,10 +11,12 @@
 #include <QScrollBar>
 #include <QAbstractTextDocumentLayout>
 #include <QTextCharFormat>
-#include <internal/QCodeEditor.hpp>
 #include <QCursor>
-
+#include <QCompleter>
+#include <QAbstractItemView>
+#include <QShortcut>
 #include <QDebug>
+
 
 static QVector<QPair<QString, QString>> parentheses = {
     {"(", ")"},
@@ -28,6 +30,7 @@ QCodeEditor::QCodeEditor(QWidget* widget) :
     m_highlighter(nullptr),
     m_syntaxStyle(nullptr),
     m_lineNumberArea(nullptr),
+    m_completer(nullptr),
     m_autoIndentation(true),
     m_autoParentheses(true),
     m_replaceTab(true),
@@ -155,8 +158,8 @@ void QCodeEditor::updateExtraSelection()
 
 void QCodeEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection>& extraSelection)
 {
-    auto currentSymbol = getCharUnderCursor();
-    auto prevSymbol = getCharUnderCursor(-1);
+    auto currentSymbol = charUnderCursor();
+    auto prevSymbol = charUnderCursor(-1);
 
     for (auto& pair : parentheses)
     {
@@ -306,8 +309,80 @@ int QCodeEditor::getFirstVisibleBlock()
     return 0;
 }
 
+bool QCodeEditor::proceedCompleterBegin(QKeyEvent *e)
+{
+    if (m_completer &&
+        m_completer->popup()->isVisible())
+    {
+        switch (e->key())
+        {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Escape:
+        case Qt::Key_Tab:
+        case Qt::Key_Backtab:
+            e->ignore();
+            return true; // let the completer do default behavior
+        default:
+            break;
+        }
+    }
+
+    // todo: Replace with modifiable QShortcut
+    auto isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space);
+
+    if (!m_completer || !isShortcut)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void QCodeEditor::proceedCompleterEnd(QKeyEvent *e)
+{
+    auto ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+
+    if (!m_completer || (ctrlOrShift && e->text().isEmpty()))
+    {
+        return;
+    }
+
+    static QString eow(R"(~!@#$%^&*()_+{}|:"<>?,./;'[]\-=)");
+
+    auto isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space);
+    auto completionPrefix = textUnderCursor();
+
+    if (!isShortcut &&
+        (e->text().isEmpty() ||
+         completionPrefix.length() < 2 ||
+         eow.contains(e->text().right(1))))
+    {
+        m_completer->popup()->hide();
+        return;
+    }
+
+    if (completionPrefix != m_completer->completionPrefix())
+    {
+        m_completer->setCompletionPrefix(completionPrefix);
+        m_completer->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
+    }
+
+    auto cursRect = cursorRect();
+    cursRect.setWidth(
+        m_completer->popup()->sizeHintForColumn(0) +
+        m_completer->popup()->verticalScrollBar()->sizeHint().width()
+    );
+
+    qDebug() << "Showing completer at " << cursRect;
+
+    m_completer->complete(cursRect);
+}
+
 void QCodeEditor::keyPressEvent(QKeyEvent* e)
 {
+    auto completerSkip = proceedCompleterBegin(e);
+
     if (m_replaceTab && e->key() == Qt::Key_Tab)
     {
         e->ignore();
@@ -315,61 +390,76 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e)
         return;
     }
 
-    // Auto indentation
-    int indentationLevel = 0;
-    if (m_autoIndentation && e->key() == Qt::Key_Return)
+    if (!completerSkip)
     {
-        auto blockText = textCursor().block().text();
-
-        for (auto i = 0;
-             i < blockText.size() && QString("\t ").contains(blockText[i]);
-             ++i)
+        // Auto indentation
+        int indentationLevel = 0;
+        if (m_autoIndentation && e->key() == Qt::Key_Return)
         {
-            if (blockText[i] == ' ')
+            auto blockText = textCursor().block().text();
+
+            for (auto i = 0;
+                 i < blockText.size() && QString("\t ").contains(blockText[i]);
+                 ++i)
             {
-                indentationLevel++;
-            }
-            else
-            {
-                indentationLevel += tabStopWidth() / fontMetrics().averageCharWidth();
+                if (blockText[i] == ' ')
+                {
+                    indentationLevel++;
+                }
+                else
+                {
+                    indentationLevel += tabStopWidth() / fontMetrics().averageCharWidth();
+                }
             }
         }
-    }
 
-    QTextEdit::keyPressEvent(e);
+        QTextEdit::keyPressEvent(e);
 
-    if (m_autoIndentation && e->key() == Qt::Key_Return)
-    {
-        insertPlainText(QString(indentationLevel, ' '));
-    }
-
-    if (m_autoParentheses)
-    {
-        for (auto&& el : parentheses)
+        if (m_autoIndentation && e->key() == Qt::Key_Return)
         {
-            // Inserting closed brace
-            if (el.first == e->text())
-            {
-                insertPlainText(el.second);
-                moveCursor(QTextCursor::MoveOperation::Left);
-                break;
-            }
+            insertPlainText(QString(indentationLevel, ' '));
+        }
 
-            // If it's close brace - check parentheses
-            if (el.second == e->text())
+        if (m_autoParentheses)
+        {
+            for (auto&& el : parentheses)
             {
-                auto symbol = getCharUnderCursor();
-
-                if (symbol == el.second)
+                // Inserting closed brace
+                if (el.first == e->text())
                 {
-                    textCursor().deletePreviousChar();
-                    moveCursor(QTextCursor::MoveOperation::Right);
+                    insertPlainText(el.second);
+                    moveCursor(QTextCursor::MoveOperation::Left);
+                    break;
                 }
 
-                break;
+                // If it's close brace - check parentheses
+                if (el.second == e->text())
+                {
+                    auto symbol = charUnderCursor();
+
+                    if (symbol == el.second)
+                    {
+                        textCursor().deletePreviousChar();
+                        moveCursor(QTextCursor::MoveOperation::Right);
+                    }
+
+                    break;
+                }
             }
         }
     }
+
+    proceedCompleterEnd(e);
+}
+
+void QCodeEditor::setAutoIndentation(bool enabled)
+{
+    m_autoIndentation = enabled;
+}
+
+bool QCodeEditor::autoIndentation() const
+{
+    return m_autoIndentation;
 }
 
 void QCodeEditor::setAutoParentheses(bool enabled)
@@ -404,9 +494,63 @@ int QCodeEditor::tabReplaceSize() const
     return m_tabReplace.size();
 }
 
-QChar QCodeEditor::getCharUnderCursor(int offset) const
+void QCodeEditor::setCompleter(QCompleter *completer)
 {
+    if (m_completer)
+    {
+        disconnect(m_completer, nullptr, this, nullptr);
+    }
 
+    m_completer = completer;
+
+    if (!m_completer)
+    {
+        return;
+    }
+
+    m_completer->setWidget(this);
+    m_completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+
+    connect(
+        m_completer,
+        QOverload<const QString&>::of(&QCompleter::activated),
+        this,
+        &QCodeEditor::insertCompletion
+    );
+}
+
+void QCodeEditor::focusInEvent(QFocusEvent *e)
+{
+    if (m_completer)
+    {
+        m_completer->setWidget(this);
+    }
+
+    QTextEdit::focusInEvent(e);
+}
+
+void QCodeEditor::insertCompletion(QString s)
+{
+    if (m_completer->widget() != this)
+    {
+        return;
+    }
+
+    auto tc = textCursor();
+    auto extra = s.length() - m_completer->completionPrefix().length();
+    tc.movePosition(QTextCursor::Left);
+    tc.movePosition(QTextCursor::EndOfWord);
+    tc.insertText(s.right(extra));
+    setTextCursor(tc);
+}
+
+QCompleter *QCodeEditor::completer() const
+{
+    return m_completer;
+}
+
+QChar QCodeEditor::charUnderCursor(int offset) const
+{
     auto block = textCursor().blockNumber();
     auto index = textCursor().positionInBlock();
     auto text = document()->findBlockByNumber(block).text();
@@ -415,8 +559,15 @@ QChar QCodeEditor::getCharUnderCursor(int offset) const
 
     if (index < 0 || index >= text.size())
     {
-        return QChar();
+        return {};
     }
 
     return text[index];
+}
+
+QString QCodeEditor::textUnderCursor() const
+{
+    auto tc = textCursor();
+    tc.select(QTextCursor::WordUnderCursor);
+    return tc.selectedText();
 }
