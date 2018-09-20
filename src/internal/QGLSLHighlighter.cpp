@@ -53,12 +53,6 @@ QGLSLHighlighter::QGLSLHighlighter(QTextDocument* document) :
         "Number"
     });
 
-    // Strings
-    m_highlightRules.append({
-        QRegularExpression("\".*\""),
-        "String"
-    });
-
     // Define
     m_highlightRules.append({
         QRegularExpression(R"(#[a-zA-Z_]+)"),

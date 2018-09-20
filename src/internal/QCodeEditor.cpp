@@ -1,5 +1,5 @@
 // Internal
-#include <internal/QLineNumberArea.hpp>
+#include <QLineNumberArea>
 #include <QSyntaxStyle>
 #include <QCodeEditor>
 #include <QStyleSyntaxHighlighter>
@@ -15,9 +15,7 @@
 #include <QCompleter>
 #include <QAbstractItemView>
 #include <QShortcut>
-#include <QDebug>
 #include <QMimeData>
-#include <internal/QCodeEditor.hpp>
 
 
 static QVector<QPair<QString, QString>> parentheses = {

@@ -8,6 +8,7 @@
 #include <QCXXHighlighter>
 #include <QGLSLHighlighter>
 #include <QXMLHighlighter>
+#include <QJSONHighlighter>
 
 // Qt
 #include <QComboBox>
@@ -47,7 +48,8 @@ void MainWindow::initData()
     m_codeSamples = {
         {"C++",  loadCode(":/code_samples/cxx.cpp")},
         {"GLSL", loadCode(":/code_samples/shader.glsl")},
-        {"XML",  loadCode(":/code_samples/xml.xml")}
+        {"XML",  loadCode(":/code_samples/xml.xml")},
+        {"JSON",  loadCode(":/code_samples/json.json")}
     };
 
     m_completers = {
@@ -59,7 +61,8 @@ void MainWindow::initData()
         {"None", nullptr},
         {"C++",  new QCXXHighlighter},
         {"GLSL", new QGLSLHighlighter},
-        {"XML",  new QXMLHighlighter}
+        {"XML",  new QXMLHighlighter},
+        {"JSON", new QJSONHighlighter}
     };
 
     m_styles = {

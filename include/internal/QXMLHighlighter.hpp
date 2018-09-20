@@ -2,7 +2,6 @@
 
 // QCodeEditor
 #include <QStyleSyntaxHighlighter> // Required for inheritance
-#include <QHighlightRule>
 
 // Qt
 #include <QVector>
@@ -14,6 +13,7 @@
  */
 class QXMLHighlighter : public QStyleSyntaxHighlighter
 {
+    Q_OBJECT
 public:
 
     /**

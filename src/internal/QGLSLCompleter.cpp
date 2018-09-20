@@ -4,7 +4,6 @@
 
 // Qt
 #include <QStringListModel>
-#include <QtWidgets/QCompleter>
 #include <QFile>
 
 QGLSLCompleter::QGLSLCompleter(QObject *parent) :

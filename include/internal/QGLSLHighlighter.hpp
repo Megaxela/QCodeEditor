@@ -16,6 +16,7 @@ class QSyntaxStyle;
  */
 class QGLSLHighlighter : public QStyleSyntaxHighlighter
 {
+    Q_OBJECT
 public:
 
     /**

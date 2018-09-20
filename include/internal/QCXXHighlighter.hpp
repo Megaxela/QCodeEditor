@@ -16,6 +16,7 @@ class QSyntaxStyle;
  */
 class QCXXHighlighter : public QStyleSyntaxHighlighter
 {
+    Q_OBJECT
 public:
 
     /**

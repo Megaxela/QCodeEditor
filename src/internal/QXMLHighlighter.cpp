@@ -24,10 +24,10 @@ QXMLHighlighter::QXMLHighlighter(QTextDocument* document) :
 void QXMLHighlighter::highlightBlock(const QString& text)
 {
     // Special treatment for xml element regex as we use captured text to emulate lookbehind
-    auto xmlElementMatch = m_xmlElementRegex.globalMatch(text);
-    while (xmlElementMatch.hasNext())
+    auto matchIterator = m_xmlElementRegex.globalMatch(text);
+    while (matchIterator.hasNext())
     {
-        auto match = xmlElementMatch.next();
+        auto match = matchIterator.next();
 
         setFormat(
             match.capturedStart(),
