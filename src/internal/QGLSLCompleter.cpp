@@ -12,7 +12,7 @@ QGLSLCompleter::QGLSLCompleter(QObject *parent) :
     // Setting up GLSL types
     QStringList list;
 
-    Q_INIT_RESOURCE(resources);
+    Q_INIT_RESOURCE(qcodeeditor_resources);
     QFile fl(":/languages/glsl.xml");
 
     if (!fl.open(QIODevice::ReadOnly))

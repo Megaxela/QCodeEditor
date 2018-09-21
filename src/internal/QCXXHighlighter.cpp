@@ -16,7 +16,7 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
     m_commentStartPattern(QRegularExpression(R"(/\*)")),
     m_commentEndPattern  (QRegularExpression(R"(\*/)"))
 {
-    Q_INIT_RESOURCE(resources);
+    Q_INIT_RESOURCE(qcodeeditor_resources);
     QFile fl(":/languages/cpp.xml");
 
     if (!fl.open(QIODevice::ReadOnly))

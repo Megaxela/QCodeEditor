@@ -1,6 +1,9 @@
 # Qt Code Editor Widget
 It's widget for editing/viewing code.
 
+This project uses resource named `qcodeeditor_resources.qrc`. Main application
+must not use resource file with the same name.
+
 (It's not project from Qt example)
 
 ## Requirements
