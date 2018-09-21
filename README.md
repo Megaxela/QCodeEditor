@@ -17,6 +17,7 @@ It's widget for editing/viewing code.
 1. C++ highlight rules.
 1. XML highlight rules.
 1. JSON highligh rules.
+1. Frame selection.
 1. Qt Creator styles.
 
 ## Build

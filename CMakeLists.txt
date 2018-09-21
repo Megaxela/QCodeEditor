@@ -26,6 +26,7 @@ set(INCLUDE_FILES
     include/QLanguage
     include/QXMLHighlighter
     include/QJSONHighlighter
+    include/QFramedTextAttribute
     include/internal/QHighlightRule.hpp
     include/internal/QCodeEditor.hpp
     include/internal/QCXXHighlighter.hpp
@@ -37,6 +38,7 @@ set(INCLUDE_FILES
     include/internal/QLanguage.hpp
     include/internal/QXMLHighlighter.hpp
     include/internal/QJSONHighlighter.hpp
+    include/internal/QFramedTextAttribute.hpp
 )
 
 set(SOURCE_FILES
@@ -50,6 +52,7 @@ set(SOURCE_FILES
     src/internal/QLanguage.cpp
     src/internal/QXMLHighlighter.cpp
     src/internal/QJSONHighlighter.cpp
+    src/internal/QFramedTextAttribute.cpp
 )
 
 # Create code for QObjects

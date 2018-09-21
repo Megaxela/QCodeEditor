@@ -7,6 +7,7 @@ class QCompleter;
 class QLineNumberArea;
 class QSyntaxStyle;
 class QStyleSyntaxHighlighter;
+class QFramedTextAttribute;
 
 /**
  * @brief Class, that describes code editor.
@@ -139,19 +140,80 @@ public slots:
      */
     void updateStyle();
 
+    /**
+     * @brief Slot, that will be called on selection
+     * change.
+     */
+    void onSelectionChanged();
+
 protected:
+    /**
+     * @brief Method, that's called on any text insertion of
+     * mimedata into editor. If it's text - it inserts text
+     * as plain text.
+     */
     void insertFromMimeData(const QMimeData* source) override;
 
+    /**
+     * @brief Method, that's called on editor painting. This
+     * method if overloaded for line number area redraw.
+     */
     void paintEvent(QPaintEvent* e) override;
 
+    /**
+     * @brief Method, that's called on any widget resize.
+     * This method if overloaded for line number area
+     * resizing.
+     */
     void resizeEvent(QResizeEvent* e) override;
 
+    /**
+     * @brief Method, that's called on any key press, posted
+     * into code editor widget. This method is overloaded for:
+     *
+     * 1. Completion
+     * 2. Tab to spaces
+     * 3. Low indentation
+     * 4. Auto parenthesis
+     */
     void keyPressEvent(QKeyEvent* e) override;
 
+    /**
+     * @brief Method, that's called on focus into widget.
+     * It's required for setting this widget to set
+     * completer.
+     */
     void focusInEvent(QFocusEvent *e) override;
 
 private:
 
+    /**
+     * @brief Method for initializing document
+     * layout handlers.
+     */
+    void initDocumentLayoutHandlers();
+
+    /**
+     * @brief Method for initializing default
+     * monospace font.
+     */
+    void initFont();
+
+    /**
+     * @brief Method for performing connection
+     * of objects.
+     */
+    void performConnections();
+
+    /**
+     * @brief Method, that performs selection
+     * frame selection.
+     */
+    void handleSelectionQuery(QTextCursor cursor);
+
+    /**
+     * @brief Method for updating geometry of line number area.
+     */
     void updateLineGeometry();
 
     /**
@@ -163,9 +225,19 @@ private:
     bool proceedCompleterBegin(QKeyEvent *e);
     void proceedCompleterEnd(QKeyEvent* e);
 
+    /**
+     * @brief Method for getting character under
+     * cursor.
+     * @param offset Offset to cursor.
+     */
     QChar charUnderCursor(int offset = 0) const;
 
-    QString textUnderCursor() const;
+    /**
+     * @brief Method for getting word under
+     * cursor.
+     * @return Word under cursor.
+     */
+    QString wordUnderCursor() const;
 
     /**
      * @brief Method, that adds highlighting of
@@ -179,12 +251,19 @@ private:
      */
     void highlightParenthesis(QList<QTextEdit::ExtraSelection>& extraSelection);
 
-    int getTrailingSpaces();
+    /**
+     * @brief Method for getting number of indentation
+     * spaces in current line. Tabs will be treated
+     * as `tabWidth / spaceWidth`
+     */
+    int getIndentationSpaces();
 
     QStyleSyntaxHighlighter* m_highlighter;
     QSyntaxStyle* m_syntaxStyle;
     QLineNumberArea* m_lineNumberArea;
     QCompleter* m_completer;
+
+    QFramedTextAttribute* m_framedAttribute;
 
     bool m_autoIndentation;
     bool m_autoParentheses;
