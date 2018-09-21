@@ -90,10 +90,12 @@ void QFramedTextAttribute::clear(QTextCursor cursor)
 {
     auto doc = cursor.document();
 
-    for (auto block = doc->firstBlock();
-         block != doc->lastBlock();
-         block = block.next())
+    for (auto blockIndex = 0;
+         blockIndex < doc->blockCount();
+         ++blockIndex)
     {
+        auto block = doc->findBlockByNumber(blockIndex);
+
         auto formats = block.textFormats();
         int offset = 0;
 

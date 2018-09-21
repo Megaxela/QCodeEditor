@@ -175,6 +175,7 @@ void QCodeEditor::onSelectionChanged()
     cursor.movePosition(QTextCursor::MoveOperation::Left);
     cursor.select(QTextCursor::SelectionType::WordUnderCursor);
 
+    QSignalBlocker blocker(this);
     m_framedAttribute->clear(cursor);
 
     if (selected.size() > 1 &&
@@ -231,7 +232,6 @@ void QCodeEditor::updateLineNumberArea(const QRect& rect)
 
 void QCodeEditor::handleSelectionQuery(QTextCursor cursor)
 {
-    QSignalBlocker blocker(this);
 
     auto searchIterator = cursor;
     searchIterator.movePosition(QTextCursor::Start);
