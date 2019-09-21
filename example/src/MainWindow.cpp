@@ -4,11 +4,13 @@
 // QCodeEditor
 #include <QCodeEditor>
 #include <QGLSLCompleter>
+#include <QLuaCompleter>
 #include <QSyntaxStyle>
 #include <QCXXHighlighter>
 #include <QGLSLHighlighter>
 #include <QXMLHighlighter>
 #include <QJSONHighlighter>
+#include <QLuaHighlighter>
 
 // Qt
 #include <QComboBox>
@@ -49,12 +51,14 @@ void MainWindow::initData()
         {"C++",  loadCode(":/code_samples/cxx.cpp")},
         {"GLSL", loadCode(":/code_samples/shader.glsl")},
         {"XML",  loadCode(":/code_samples/xml.xml")},
-        {"JSON",  loadCode(":/code_samples/json.json")}
+        {"JSON",  loadCode(":/code_samples/json.json")},
+        {"LUA",  loadCode(":/code_samples/lua.lua")}
     };
 
     m_completers = {
         {"None", nullptr},
         {"GLSL", new QGLSLCompleter(this)},
+        {"LUA", new QLuaCompleter(this)}
     };
 
     m_highlighters = {
@@ -62,7 +66,8 @@ void MainWindow::initData()
         {"C++",  new QCXXHighlighter},
         {"GLSL", new QGLSLHighlighter},
         {"XML",  new QXMLHighlighter},
-        {"JSON", new QJSONHighlighter}
+        {"JSON", new QJSONHighlighter},
+        {"LUA",  new QLuaHighlighter}
     };
 
     m_styles = {
