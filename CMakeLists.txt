@@ -16,6 +16,7 @@ set(RESOURCES_FILE
 
 set(INCLUDE_FILES
     include/QHighlightRule
+    include/QHighlightBlockRule
     include/QCodeEditor
     include/QCXXHighlighter
     include/QLineNumberArea
@@ -26,8 +27,11 @@ set(INCLUDE_FILES
     include/QLanguage
     include/QXMLHighlighter
     include/QJSONHighlighter
+    include/QLuaCompleter
+    include/QLuaHighlighter
     include/QFramedTextAttribute
     include/internal/QHighlightRule.hpp
+    include/internal/QHighlightBlockRule.hpp
     include/internal/QCodeEditor.hpp
     include/internal/QCXXHighlighter.hpp
     include/internal/QLineNumberArea.hpp
@@ -38,6 +42,8 @@ set(INCLUDE_FILES
     include/internal/QLanguage.hpp
     include/internal/QXMLHighlighter.hpp
     include/internal/QJSONHighlighter.hpp
+    include/internal/QLuaCompleter.hpp
+    include/internal/QLuaHighlighter.hpp
     include/internal/QFramedTextAttribute.hpp
 )
 
@@ -52,6 +58,8 @@ set(SOURCE_FILES
     src/internal/QLanguage.cpp
     src/internal/QXMLHighlighter.cpp
     src/internal/QJSONHighlighter.cpp
+    src/internal/QLuaCompleter.cpp
+    src/internal/QLuaHighlighter.cpp
     src/internal/QFramedTextAttribute.cpp
 )
 
@@ -76,17 +84,19 @@ target_include_directories(QCodeEditor PUBLIC
     include
 )
 
-target_compile_options(QCodeEditor
-    PRIVATE
-    -ansi
-    -pedantic
-    -Wall
-    -Wextra
-    -Weffc++
-    -Woverloaded-virtual
-    -Winit-self
-    -Wunreachable-code
-)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    target_compile_options(QCodeEditor
+		PRIVATE
+		-ansi
+		-pedantic
+		-Wall
+		-Wextra
+		-Weffc++
+		-Woverloaded-virtual
+		-Winit-self
+		-Wunreachable-code
+	)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 target_link_libraries(QCodeEditor
     Qt5::Core
