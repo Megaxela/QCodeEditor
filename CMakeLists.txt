@@ -29,6 +29,7 @@ set(INCLUDE_FILES
     include/QJSONHighlighter
     include/QLuaCompleter
     include/QLuaHighlighter
+    include/QPythonHighlighter
     include/QFramedTextAttribute
     include/internal/QHighlightRule.hpp
     include/internal/QHighlightBlockRule.hpp
@@ -44,6 +45,8 @@ set(INCLUDE_FILES
     include/internal/QJSONHighlighter.hpp
     include/internal/QLuaCompleter.hpp
     include/internal/QLuaHighlighter.hpp
+    include/internal/QPythonCompleter.hpp
+    include/internal/QPythonHighlighter.hpp
     include/internal/QFramedTextAttribute.hpp
 )
 
@@ -60,6 +63,8 @@ set(SOURCE_FILES
     src/internal/QJSONHighlighter.cpp
     src/internal/QLuaCompleter.cpp
     src/internal/QLuaHighlighter.cpp
+    src/internal/QPythonCompleter.cpp
+    src/internal/QPythonHighlighter.cpp
     src/internal/QFramedTextAttribute.cpp
 )
 

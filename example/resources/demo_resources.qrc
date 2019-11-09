@@ -6,5 +6,6 @@
         <file>code_samples/xml.xml</file>
         <file>code_samples/json.json</file>
         <file>code_samples/lua.lua</file>
+        <file>code_samples/python.py</file>
     </qresource>
 </RCC>
