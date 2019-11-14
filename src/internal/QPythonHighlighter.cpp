@@ -124,7 +124,6 @@ void QPythonHighlighter::highlightBlock(const QString& text)
     setCurrentBlockState(0);
     int startIndex = 0;
     int highlightRuleId = previousBlockState();
-    printf("highlight_rule_id=%d texts=%s\n", highlightRuleId, text.toUtf8().data());
     if (highlightRuleId < 1 || highlightRuleId > m_highlightBlockRules.size()) {
         for(int i = 0; i < m_highlightBlockRules.size(); ++i) {
             startIndex = text.indexOf(m_highlightBlockRules.at(i).startPattern);
