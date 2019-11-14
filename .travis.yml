@@ -9,7 +9,7 @@ notifications:
 
 addons:
   apt:
-    sources:
+    packages:
       cmake
       cmake-data
       qt5-default
