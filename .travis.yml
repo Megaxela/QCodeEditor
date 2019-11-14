@@ -2,10 +2,6 @@ dist: bionic
 language: cpp
 sudo: required
 
-branches:
-  only:
-    - master
-
 notifications:
   email:
     on_success: never
