@@ -20,7 +20,6 @@ compiler:
 
 script:
   - |
-    env
-
-    echo "$CXX"
-    $CXX -v
+    mkdir build
+    cmake -B$TRAVIS_BUILD_DIR/build -H$TRAVIS_BUILD_DIR
+    cmake --build "$TRAVIS_BUILD_DIR/build" --target all -- -j4
