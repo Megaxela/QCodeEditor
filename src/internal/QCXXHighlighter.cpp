@@ -64,7 +64,7 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
 
     // Single line
     m_highlightRules.append({
-        QRegularExpression(R"(/[^\n]*)"),
+        QRegularExpression(R"(//[^\n]*)"),
         "Comment"
     });
 }
