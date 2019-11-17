@@ -4,6 +4,8 @@
 #include <QCodeEditor>
 #include <QStyleSyntaxHighlighter>
 #include <QFramedTextAttribute>
+#include <QCXXHighlighter>
+
 
 // Qt
 #include <QTextBlock>
@@ -17,7 +19,6 @@
 #include <QAbstractItemView>
 #include <QShortcut>
 #include <QMimeData>
-
 
 static QVector<QPair<QString, QString>> parentheses = {
     {"(", ")"},
@@ -515,7 +516,11 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e)
         {
             insertPlainText(QString(indentationLevel, ' '));
         }
-
+        bool isCxxLang = qobject_cast<QCXXHighlighter*>(m_highlighter) != nullptr;
+        int defaultIndentation = isCxxLang?4:0;
+        // This is the amoount of space that will be indented
+        // inside of the {} curly braces. This only make C++ braces and auto indent better.
+        // for any other language it has no effect.
         if (m_autoParentheses)
         {
             for (auto&& el : parentheses)
@@ -523,8 +528,21 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e)
                 // Inserting closed brace
                 if (el.first == e->text())
                 {
-                    insertPlainText(el.second);
+                    if(el.first == '{' && m_autoIndentation && isCxxLang) {
+
+                        insertPlainText("\n");
+                        insertPlainText(QString(indentationLevel+defaultIndentation, ' '));
+                        insertPlainText("\n");
+                        insertPlainText(QString(indentationLevel, ' '));
+                        insertPlainText(el.second);
+                    }
+                    else insertPlainText(el.second);
+
                     moveCursor(QTextCursor::MoveOperation::Left);
+                    if(el.second == '}' && m_autoIndentation && isCxxLang) {
+                        int t=indentationLevel+1;
+                        while(t--) moveCursor(QTextCursor::MoveOperation::Left);
+                    }
                     break;
                 }
 
