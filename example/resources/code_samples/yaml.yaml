@@ -1,0 +1,31 @@
+# app/config/config_prod.yml
+imports:
+    - { resource: config.yml }
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: critical
+            handler:      grouped
+        grouped:
+            type:    group
+            members: [streamed, deduplicated]
+        streamed:
+            type:  stream
+            path:  '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug
+        deduplicated:
+            type:    deduplication
+            handler: swift
+        swift:
+            noone: null
+            type:       swift_mailer
+            from_email: 'from_email@test.com'
+            # Or multiple receivers:
+            # to_email:   ['to_email1@ourcodeworld.com', 'to_email2@ourcodeworld.com']
+            to_email:   "to_email@ourcodeworld.com"
+            subject:    'An Error Occurred! %%message%%'
+            level:      debug
+            formatter:  monolog.formatter.html
+            content_type: text/html

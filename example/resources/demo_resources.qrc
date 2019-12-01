@@ -7,5 +7,6 @@
         <file>code_samples/json.json</file>
         <file>code_samples/lua.lua</file>
         <file>code_samples/python.py</file>
+        <file>code_samples/yaml.yaml</file>
     </qresource>
 </RCC>
