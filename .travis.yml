@@ -1,0 +1,29 @@
+dist: bionic
+language: cpp
+sudo: required
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:beineri/opt-qt-5.12.0-bionic'
+    packages:
+      - cmake
+      - cmake-data
+      - qt512-meta-full
+      - libgl-dev
+
+compiler:
+  - gcc
+  - clang
+
+script:
+  - |
+    . /opt/qt512/bin/qt512-env.sh
+    mkdir build
+    cmake -B$TRAVIS_BUILD_DIR/build -H$TRAVIS_BUILD_DIR
+    cmake --build "$TRAVIS_BUILD_DIR/build" --target all -- -j4
