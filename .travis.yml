@@ -10,7 +10,7 @@ notifications:
 addons:
   apt:
     sources:
-      - ppa:beineri/opt-qt-5.12.0-bionic
+      - sourceline: 'ppa:beineri/opt-qt-5.12.0-bionic'
     packages:
       - cmake
       - cmake-data
