@@ -9,10 +9,12 @@ notifications:
 
 addons:
   apt:
+    sources:
+      - ppa:beineri/opt-qt-5.12.0-bionic
     packages:
-      cmake
-      cmake-data
-      qt5-default
+      - cmake
+      - cmake-data
+      - qt512-meta-full
 
 compiler:
   - gcc
