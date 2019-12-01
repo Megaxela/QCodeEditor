@@ -15,6 +15,7 @@ addons:
       - cmake
       - cmake-data
       - qt512-meta-full
+      - libgl-dev
 
 compiler:
   - gcc
