@@ -307,7 +307,7 @@ void QCodeEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection>& extraSe
             }
         }
 
-        auto format = m_syntaxStyle->getFormat("Parenthesis");
+        auto format = m_syntaxStyle->getFormat("Parentheses");
 
         // Found
         if (counter == 0)
