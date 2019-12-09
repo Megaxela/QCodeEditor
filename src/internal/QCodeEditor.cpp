@@ -24,7 +24,8 @@ static QVector<QPair<QString, QString>> parentheses = {
     {"(", ")"},
     {"{", "}"},
     {"[", "]"},
-    {"\"", "\""}
+    {"\"", "\""},
+    {"'", "'"}
 };
 
 QCodeEditor::QCodeEditor(QWidget* widget) :
@@ -474,76 +475,84 @@ void QCodeEditor::proceedCompleterEnd(QKeyEvent *e)
     m_completer->complete(cursRect);
 }
 
-void QCodeEditor::keyPressEvent(QKeyEvent* e)
-{
-    auto completerSkip = proceedCompleterBegin(e);
+void QCodeEditor::keyPressEvent(QKeyEvent* e) {
+  const int defaultIndent = tabStopWidth() / fontMetrics().averageCharWidth();
 
-    if (!completerSkip)
+  auto completerSkip = proceedCompleterBegin(e);
+
+  if (!completerSkip) {
+    if (m_replaceTab && e->key() == Qt::Key_Tab &&
+        e->modifiers() == Qt::NoModifier) {
+      insertPlainText(m_tabReplace);
+      return;
+    }
+
+    // Auto indentation
+    int indentationLevel = getIndentationSpaces();
+    int tabCounts =
+        indentationLevel * fontMetrics().averageCharWidth() / tabStopWidth();
+
+    // Have Qt Edior like behaviour, if {|} and enter is pressed indent the two
+    // parenthesis
+    if (m_autoIndentation && e->key() == Qt::Key_Return &&
+        charUnderCursor() == '}' && charUnderCursor(-1) == '{') {
+      int charsBack = 0;
+      insertPlainText("\n");
+
+      if (m_replaceTab)
+        insertPlainText(QString(indentationLevel + defaultIndent, ' '));
+      else
+        insertPlainText(QString(tabCounts + 1, '\t'));
+
+      insertPlainText("\n");
+      charsBack++;
+
+      if (m_replaceTab) {
+        insertPlainText(QString(indentationLevel, ' '));
+        charsBack += indentationLevel;
+      } else {
+        insertPlainText(QString(tabCounts, '\t'));
+        charsBack += tabCounts;
+      }
+
+      while (charsBack--)
+        moveCursor(QTextCursor::MoveOperation::Left);
+      return;
+    }
+
+    // Shortcut for moving line to left
+    if (m_replaceTab && e->key() == Qt::Key_Backtab) {
+      indentationLevel = std::min(indentationLevel, m_tabReplace.size());
+
+      auto cursor = textCursor();
+
+      cursor.movePosition(QTextCursor::MoveOperation::StartOfLine);
+      cursor.movePosition(QTextCursor::MoveOperation::Right,
+                          QTextCursor::MoveMode::KeepAnchor, indentationLevel);
+
+      cursor.removeSelectedText();
+      return;
+    }
+
+    QTextEdit::keyPressEvent(e);
+
+    if (m_autoIndentation && e->key() == Qt::Key_Return) {
+      if (m_replaceTab)
+        insertPlainText(QString(indentationLevel, ' '));
+      else
+        insertPlainText(QString(tabCounts, '\t'));
+    }
+
+    if (m_autoParentheses) 
     {
-        if (m_replaceTab &&
-            e->key() == Qt::Key_Tab &&
-            e->modifiers() == Qt::NoModifier)
-        {
-            insertPlainText(m_tabReplace);
-            return;
-        }
-
-        // Auto indentation
-        int indentationLevel = getIndentationSpaces();
-
-        // Shortcut for moving line to left
-        if (m_replaceTab &&
-            e->key() == Qt::Key_Backtab)
-        {
-            indentationLevel = std::min(indentationLevel, m_tabReplace.size());
-
-            auto cursor = textCursor();
-
-            cursor.movePosition(QTextCursor::MoveOperation::StartOfLine);
-            cursor.movePosition(
-                QTextCursor::MoveOperation::Right,
-                QTextCursor::MoveMode::KeepAnchor,
-                indentationLevel
-            );
-
-            cursor.removeSelectedText();
-            return;
-        }
-
-        QTextEdit::keyPressEvent(e);
-
-        if (m_autoIndentation && e->key() == Qt::Key_Return)
-        {
-            insertPlainText(QString(indentationLevel, ' '));
-        }
-        bool isCxxLang = qobject_cast<QCXXHighlighter*>(m_highlighter) != nullptr;
-        int defaultIndentation = isCxxLang?4:0;
-        // This is the amoount of space that will be indented
-        // inside of the {} curly braces. This only make C++ braces and auto indent better.
-        // for any other language it has no effect.
-        if (m_autoParentheses)
-        {
-            for (auto&& el : parentheses)
-            {
+      for (auto&& el : parentheses) 
+      {
                 // Inserting closed brace
-                if (el.first == e->text())
+                if (el.first == e->text()) 
                 {
-                    if(el.first == '{' && m_autoIndentation && isCxxLang) {
-
-                        insertPlainText("\n");
-                        insertPlainText(QString(indentationLevel+defaultIndentation, ' '));
-                        insertPlainText("\n");
-                        insertPlainText(QString(indentationLevel, ' '));
-                        insertPlainText(el.second);
-                    }
-                    else insertPlainText(el.second);
-
-                    moveCursor(QTextCursor::MoveOperation::Left);
-                    if(el.second == '}' && m_autoIndentation && isCxxLang) {
-                        int t=indentationLevel+1;
-                        while(t--) moveCursor(QTextCursor::MoveOperation::Left);
-                    }
-                    break;
+                  insertPlainText(el.second);
+                  moveCursor(QTextCursor::MoveOperation::Left);
+                  break;
                 }
 
                 // If it's close brace - check parentheses
