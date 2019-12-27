@@ -106,7 +106,7 @@ public:
      */
     QCompleter* completer() const;
 
-public slots:
+public Q_SLOTS:
 
     /**
      * @brief Slot, that performs insertion of
