@@ -494,8 +494,10 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e) {
 
     // Have Qt Edior like behaviour, if {|} and enter is pressed indent the two
     // parenthesis
-    if (m_autoIndentation && e->key() == Qt::Key_Return &&
-        charUnderCursor() == '}' && charUnderCursor(-1) == '{') {
+    if (m_autoIndentation && 
+       (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) &&
+        charUnderCursor() == '}' && charUnderCursor(-1) == '{') 
+    {
       int charsBack = 0;
       insertPlainText("\n");
 
@@ -507,10 +509,13 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e) {
       insertPlainText("\n");
       charsBack++;
 
-      if (m_replaceTab) {
+      if (m_replaceTab) 
+      {
         insertPlainText(QString(indentationLevel, ' '));
         charsBack += indentationLevel;
-      } else {
+      }
+      else 
+      {
         insertPlainText(QString(tabCounts, '\t'));
         charsBack += tabCounts;
       }
@@ -536,7 +541,7 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e) {
 
     QTextEdit::keyPressEvent(e);
 
-    if (m_autoIndentation && e->key() == Qt::Key_Return) {
+    if (m_autoIndentation && (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)) {
       if (m_replaceTab)
         insertPlainText(QString(indentationLevel, ' '));
       else
