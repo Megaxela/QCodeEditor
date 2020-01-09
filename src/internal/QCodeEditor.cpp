@@ -476,7 +476,7 @@ void QCodeEditor::proceedCompleterEnd(QKeyEvent *e)
 }
 
 void QCodeEditor::keyPressEvent(QKeyEvent* e) {
-  const int defaultIndent = tabStopWidth() / fontMetrics().averageCharWidth();
+  const int defaultIndent = tabStopDistance() / fontMetrics().averageCharWidth();
 
   auto completerSkip = proceedCompleterBegin(e);
 
@@ -490,7 +490,7 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e) {
     // Auto indentation
     int indentationLevel = getIndentationSpaces();
     int tabCounts =
-        indentationLevel * fontMetrics().averageCharWidth() / tabStopWidth();
+        indentationLevel * fontMetrics().averageCharWidth() / tabStopDistance();
 
     // Have Qt Edior like behaviour, if {|} and enter is pressed indent the two
     // parenthesis
@@ -714,7 +714,7 @@ int QCodeEditor::getIndentationSpaces()
         }
         else
         {
-            indentationLevel += tabStopWidth() / fontMetrics().averageCharWidth();
+            indentationLevel += tabStopDistance() / fontMetrics().averageCharWidth();
         }
     }
 
