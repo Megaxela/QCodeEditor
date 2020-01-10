@@ -476,7 +476,11 @@ void QCodeEditor::proceedCompleterEnd(QKeyEvent *e)
 }
 
 void QCodeEditor::keyPressEvent(QKeyEvent* e) {
+#if QT_VERSION >= 0x050A00
   const int defaultIndent = tabStopDistance() / fontMetrics().averageCharWidth();
+#else
+  const int defaultIndent = tabStopWidth() / fontMetrics().averageCharWidth();
+#endif
 
   auto completerSkip = proceedCompleterBegin(e);
 
@@ -489,8 +493,14 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e) {
 
     // Auto indentation
     int indentationLevel = getIndentationSpaces();
+
+#if QT_VERSION >= 0x050A00
     int tabCounts =
         indentationLevel * fontMetrics().averageCharWidth() / tabStopDistance();
+#else
+    int tabCounts =
+        indentationLevel * fontMetrics().averageCharWidth() / tabStopWidth();
+#endif
 
     // Have Qt Edior like behaviour, if {|} and enter is pressed indent the two
     // parenthesis
@@ -714,7 +724,11 @@ int QCodeEditor::getIndentationSpaces()
         }
         else
         {
+#if QT_VERSION >= 0x050A00
             indentationLevel += tabStopDistance() / fontMetrics().averageCharWidth();
+#else
+            indentationLevel += tabStopWidth() / fontMetrics().averageCharWidth();
+#endif
         }
     }
 
