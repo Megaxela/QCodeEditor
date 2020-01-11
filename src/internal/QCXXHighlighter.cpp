@@ -10,7 +10,7 @@
 QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
     QStyleSyntaxHighlighter(document),
     m_highlightRules     (),
-    m_includePattern     (QRegularExpression(R"(#include\s+([<"][a-zA-Z0-9*._]+[">]))")),
+    m_includePattern     (QRegularExpression(R"(^\s*#\s*include\s*([<"][^:?"<>\|]+[">]))")),
     m_functionPattern    (QRegularExpression(R"(\b([A-Za-z0-9_]+(?:\s+|::))*([A-Za-z0-9_]+)(?=\())")),
     m_defTypePattern     (QRegularExpression(R"(\b([A-Za-z0-9_]+)\s+[A-Za-z]{1}[A-Za-z0-9_]+\s*[;=])")),
     m_commentStartPattern(QRegularExpression(R"(/\*)")),
