@@ -42,12 +42,12 @@ bool QSyntaxStyle::load(QString fl)
 
                 if (attributes.hasAttribute("background"))
                 {
-                    format.setBackground(QColor(attributes.value("background")));
+                    format.setBackground(QColor(attributes.value("background").toString()));
                 }
 
                 if (attributes.hasAttribute("foreground"))
                 {
-                    format.setForeground(QColor(attributes.value("foreground")));
+                    format.setForeground(QColor(attributes.value("foreground").toString()));
                 }
 
                 if (attributes.hasAttribute("bold") &&
