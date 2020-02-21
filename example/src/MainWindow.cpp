@@ -13,6 +13,7 @@
 #include <QJSONHighlighter>
 #include <QLuaHighlighter>
 #include <QPythonHighlighter>
+#include <QYAMLHighlighter>
 
 // Qt
 #include <QComboBox>
@@ -55,7 +56,8 @@ void MainWindow::initData()
         {"XML",  loadCode(":/code_samples/xml.xml")},
         {"JSON",  loadCode(":/code_samples/json.json")},
         {"LUA",  loadCode(":/code_samples/lua.lua")},
-        {"Python",  loadCode(":/code_samples/python.py")}
+        {"Python",  loadCode(":/code_samples/python.py")},
+        {"YAML", loadCode(":/code_samples/yaml.yaml")}
     };
 
     m_completers = {
@@ -73,6 +75,7 @@ void MainWindow::initData()
         {"JSON", new QJSONHighlighter},
         {"LUA",  new QLuaHighlighter},
         {"Python",  new QPythonHighlighter},
+        {"YAML", new QYAMLHighlighter}
     };
 
     m_styles = {

@@ -31,6 +31,7 @@ set(INCLUDE_FILES
     include/QLuaHighlighter
     include/QPythonHighlighter
     include/QFramedTextAttribute
+	include/QYAMLHighlighter
     include/internal/QHighlightRule.hpp
     include/internal/QHighlightBlockRule.hpp
     include/internal/QCodeEditor.hpp
@@ -42,6 +43,7 @@ set(INCLUDE_FILES
     include/internal/QGLSLHighlighter.hpp
     include/internal/QLanguage.hpp
     include/internal/QXMLHighlighter.hpp
+	include/internal/QYAMLHighlighter.hpp
     include/internal/QJSONHighlighter.hpp
     include/internal/QLuaCompleter.hpp
     include/internal/QLuaHighlighter.hpp
@@ -60,6 +62,7 @@ set(SOURCE_FILES
     src/internal/QGLSLHighlighter.cpp
     src/internal/QLanguage.cpp
     src/internal/QXMLHighlighter.cpp
+	src/internal/QYAMLHighlighter.cpp
     src/internal/QJSONHighlighter.cpp
     src/internal/QLuaCompleter.cpp
     src/internal/QLuaHighlighter.cpp
