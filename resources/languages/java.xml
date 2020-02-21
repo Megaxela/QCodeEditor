@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <section name="Keyword">
+        <name>abstract</name>
+        <name>assert</name>
+        <name>break</name>
+        <name>case</name>
+        <name>catch</name>
+        <name>const</name>
+        <name>continue</name>
+        <name>default</name>
+        <name>do</name>
+        <name>else</name>
+        <name>extends</name>
+        <name>final</name>
+        <name>finally</name>
+        <name>for</name>
+        <name>if</name>
+        <name>goto</name>
+        <name>implements</name>
+        <name>import</name>
+        <name>instanceof</name>
+        <name>native</name>
+        <name>new</name>
+        <name>package</name>
+        <name>private</name>
+        <name>protected</name>
+        <name>public</name>
+        <name>return</name>
+        <name>static</name>
+        <name>strictfp</name>
+        <name>super</name>
+        <name>switch</name>
+        <name>synchronized</name>
+        <name>this</name>
+        <name>throw</name>
+        <name>throws</name>
+        <name>transient</name>
+        <name>try</name>
+        <name>volatile</name>
+        <name>while</name>
+
+        <name>true</name>
+        <name>false</name>
+        <name>null</name>
+
+    </section>
+    <section name="PrimitiveType">
+        <name>boolean</name>
+        <name>byte</name>
+        <name>char</name>
+        <name>class</name>
+        <name>double</name>
+        <name>enum</name>
+        <name>float</name>
+        <name>int</name>
+        <name>interface</name>
+        <name>long</name>
+        <name>short</name>
+        <name>void</name>
+    </section>
+</root>

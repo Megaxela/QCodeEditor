@@ -10,6 +10,7 @@
 #include <QCXXHighlighter>
 #include <QGLSLHighlighter>
 #include <QXMLHighlighter>
+#include <QJavaHighlighter>
 #include <QJSONHighlighter>
 #include <QLuaHighlighter>
 #include <QPythonHighlighter>
@@ -53,6 +54,7 @@ void MainWindow::initData()
         {"C++",  loadCode(":/code_samples/cxx.cpp")},
         {"GLSL", loadCode(":/code_samples/shader.glsl")},
         {"XML",  loadCode(":/code_samples/xml.xml")},
+        {"Java",  loadCode(":/code_samples/java.java")},
         {"JSON",  loadCode(":/code_samples/json.json")},
         {"LUA",  loadCode(":/code_samples/lua.lua")},
         {"Python",  loadCode(":/code_samples/python.py")}
@@ -70,6 +72,7 @@ void MainWindow::initData()
         {"C++",  new QCXXHighlighter},
         {"GLSL", new QGLSLHighlighter},
         {"XML",  new QXMLHighlighter},
+        {"Java", new QJavaHighlighter },
         {"JSON", new QJSONHighlighter},
         {"LUA",  new QLuaHighlighter},
         {"Python",  new QPythonHighlighter},
