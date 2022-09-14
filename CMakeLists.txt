@@ -75,9 +75,9 @@ set(CMAKE_AUTOMOC On)
 set(CMAKE_AUTORCC ON)
 
 # Find includes in corresponding build directories
-find_package(Qt5Core    CONFIG REQUIRED)
-find_package(Qt5Widgets CONFIG REQUIRED)
-find_package(Qt5Gui     CONFIG REQUIRED)
+find_package(Qt6Core    CONFIG REQUIRED)
+find_package(Qt6Widgets CONFIG REQUIRED)
+find_package(Qt6Gui     CONFIG REQUIRED)
 
 add_library(QCodeEditor STATIC
     ${RESOURCES_FILE}
@@ -104,7 +104,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 target_link_libraries(QCodeEditor
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
+    Qt::Core
+    Qt::Widgets
+    Qt::Gui
 )

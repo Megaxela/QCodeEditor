@@ -25,15 +25,12 @@ bool QSyntaxStyle::load(QString fl)
 
         if(token == QXmlStreamReader::StartElement)
         {
-            if (reader.name() == "style-scheme")
-            {
+            if (reader.name().toString() == "style-scheme") {
                 if (reader.attributes().hasAttribute("name"))
                 {
                     m_name = reader.attributes().value("name").toString();
                 }
-            }
-            else if (reader.name() == "style")
-            {
+            } else if (reader.name().toString() == "style") {
                 auto attributes = reader.attributes();
 
                 auto name = attributes.value("name");
@@ -50,21 +47,19 @@ bool QSyntaxStyle::load(QString fl)
                     format.setForeground(QColor(attributes.value("foreground").toString()));
                 }
 
-                if (attributes.hasAttribute("bold") &&
-                    attributes.value("bold") == "true")
-                {
+                if (attributes.hasAttribute("bold")
+                    && attributes.value("bold").toString() == "true") {
                     format.setFontWeight(QFont::Weight::Bold);
                 }
 
-                if (attributes.hasAttribute("italic") &&
-                    attributes.value("italic") == "true")
-                {
+                if (attributes.hasAttribute("italic")
+                    && attributes.value("italic").toString() == "true") {
                     format.setFontItalic(true);
                 }
 
                 if (attributes.hasAttribute("underlineStyle"))
                 {
-                    auto underline = attributes.value("underlineStyle");
+                    auto underline = attributes.value("underlineStyle").toString();
 
                     auto s = QTextCharFormat::UnderlineStyle::NoUnderline;
 
