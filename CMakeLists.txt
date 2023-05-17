@@ -97,6 +97,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 		-Wall
 		-Wextra
 		-Weffc++
+		-std=c++11
 		-Woverloaded-virtual
 		-Winit-self
 		-Wunreachable-code
