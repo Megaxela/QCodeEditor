@@ -88,6 +88,7 @@ add_library(QCodeEditor STATIC
 target_include_directories(QCodeEditor PUBLIC
     include
 )
+target_compile_features(QCodeEditor PUBLIC cxx_std_11)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     target_compile_options(QCodeEditor
