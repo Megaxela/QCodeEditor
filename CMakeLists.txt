@@ -87,7 +87,6 @@ target_include_directories(QCodeEditor PUBLIC
     include
 )
 
-add_compile_options(-std=gnu++11)
 target_compile_features(QCodeEditor PUBLIC cxx_std_11)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
