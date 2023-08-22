@@ -83,6 +83,8 @@ add_library(QCodeEditor STATIC
     ${INCLUDE_FILES}
 )
 
+target_compile_features(QCodeEditor PRIVATE cxx_std_17)
+
 target_include_directories(QCodeEditor PUBLIC
     include
 )
