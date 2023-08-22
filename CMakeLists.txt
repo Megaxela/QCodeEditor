@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.6)
 project(QCodeEditor)
 
-add_compile_options(-std=c++11)
+# Set C++11 as the required standard
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
