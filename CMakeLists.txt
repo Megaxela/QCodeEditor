@@ -83,8 +83,6 @@ add_library(QCodeEditor STATIC
     ${INCLUDE_FILES}
 )
 
-target_compile_features(QCodeEditor PUBLIC cxx_std_11)
-
 target_include_directories(QCodeEditor PUBLIC
     include
 )
