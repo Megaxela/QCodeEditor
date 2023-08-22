@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(QCodeEditor)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
@@ -89,8 +89,8 @@ target_include_directories(QCodeEditor PUBLIC
     include
 )
 
-add_compile_options(-std=c++11)
-target_compile_features(QCodeEditor PUBLIC cxx_std_11)
+add_compile_options(-std=c++17)
+target_compile_features(QCodeEditor PUBLIC cxx_std_17)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     target_compile_options(QCodeEditor
