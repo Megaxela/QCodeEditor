@@ -3,6 +3,10 @@ project(QCodeEditor)
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 if (${BUILD_EXAMPLE})
     message(STATUS "QCodeEditor example will be built.")
     add_subdirectory(example)
@@ -82,8 +86,6 @@ add_library(QCodeEditor STATIC
     ${SOURCE_FILES}
     ${INCLUDE_FILES}
 )
-
-target_compile_features(QCodeEditor PRIVATE cxx_std_17)
 
 target_include_directories(QCodeEditor PUBLIC
     include
