@@ -3,10 +3,6 @@ project(QCodeEditor)
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 if (${BUILD_EXAMPLE})
     message(STATUS "QCodeEditor example will be built.")
     add_subdirectory(example)
@@ -87,23 +83,23 @@ add_library(QCodeEditor STATIC
     ${INCLUDE_FILES}
 )
 
+target_compile_features(QCodeEditor PUBLIC cxx_std_11)
+
 target_include_directories(QCodeEditor PUBLIC
     include
 )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    target_compile_options(QCodeEditor
-		PRIVATE
-		-ansi
-		-pedantic
-		-Wall
-		-Wextra
-		-Weffc++
-		-Woverloaded-virtual
-		-Winit-self
-		-Wunreachable-code
-	)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+target_compile_options(QCodeEditor
+	PRIVATE
+	-ansi
+	-pedantic
+	-Wall
+	-Wextra
+	-Weffc++
+	-Woverloaded-virtual
+	-Winit-self
+	-Wunreachable-code
+)
 
 target_link_libraries(QCodeEditor
     Qt::Core
