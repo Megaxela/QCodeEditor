@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.6)
 project(QCodeEditor)
 
+add_compile_options(-std=c++11)
+
 option(BUILD_EXAMPLE "Example building required" Off)
 
 if (${BUILD_EXAMPLE})
@@ -82,8 +84,6 @@ add_library(QCodeEditor STATIC
     ${SOURCE_FILES}
     ${INCLUDE_FILES}
 )
-
-target_compile_features(QCodeEditor PUBLIC cxx_std_11)
 
 target_include_directories(QCodeEditor PUBLIC
     include
