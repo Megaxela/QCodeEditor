@@ -15,13 +15,14 @@
 #include <QPythonHighlighter>
 
 // Qt
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QCheckBox>
-#include <QSpinBox>
+#include <QComboBox>
+#include <QFile>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QLabel>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),

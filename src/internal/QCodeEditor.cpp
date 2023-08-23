@@ -537,16 +537,17 @@ void QCodeEditor::keyPressEvent(QKeyEvent* e) {
 
     // Shortcut for moving line to left
     if (m_replaceTab && e->key() == Qt::Key_Backtab) {
-      indentationLevel = std::min(indentationLevel, m_tabReplace.size());
+        indentationLevel = std::min(indentationLevel, (int) m_tabReplace.size());
 
-      auto cursor = textCursor();
+        auto cursor = textCursor();
 
-      cursor.movePosition(QTextCursor::MoveOperation::StartOfLine);
-      cursor.movePosition(QTextCursor::MoveOperation::Right,
-                          QTextCursor::MoveMode::KeepAnchor, indentationLevel);
+        cursor.movePosition(QTextCursor::MoveOperation::StartOfLine);
+        cursor.movePosition(QTextCursor::MoveOperation::Right,
+                            QTextCursor::MoveMode::KeepAnchor,
+                            indentationLevel);
 
-      cursor.removeSelectedText();
-      return;
+        cursor.removeSelectedText();
+        return;
     }
 
     QTextEdit::keyPressEvent(e);
