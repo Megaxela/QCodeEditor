@@ -26,15 +26,13 @@ jobs:
     - name: check gcc
       run: gcc --version
     - run: g++ --version
-    - run: echo {{$CC}}
-    - run: echo {{$CXX}}
     - name: Install Qt
       uses: jurplel/install-qt-action@v3.3.0
       with:
         version: '6.5.0'
         host: 'linux'
         target: 'desktop'
-        arch: 'gcc_64'
+        arch: 'gcc'
         install-deps: 'true'
         modules: 'qtnetworkauth'
         archives: 'icu qtbase qtsvg qtgraphicaleffects qtimageformats'
