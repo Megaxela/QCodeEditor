@@ -12,38 +12,24 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: checkout
       uses: actions/checkout@v3
-    - name: Install compiler
-      id: install_cc
-      uses: rlalik/setup-cpp-compiler@master
-      with:
-        compiler: latest
-    - name: Ninja
-      uses: seanmiddleditch/gha-setup-ninja@master
-    - run: update-alternatives --list c++
-    - run: ls /usr/bin/*cc*
-    - run: ls /usr/bin/*c++*
-    - run: ls /usr/bin/*g++*
-    - run: which cc
-    - run: which c++
     - name: Install Qt
       uses: jurplel/install-qt-action@v3.3.0
       with:
-        version: '6.2.4'
+        version: '6.5.0'
         host: 'linux'
         target: 'desktop'
         arch: 'gcc_64'
         modules: 'qtnetworkauth'
         archives: 'icu qtbase qtsvg'
         aqtversion: '==3.1.*'
-        tools: 'tools_cmake'
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -G Ninja -B ${{github.workspace}}/build -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
     - name: Build 
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build
