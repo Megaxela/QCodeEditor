@@ -25,6 +25,9 @@ jobs:
       uses: seanmiddleditch/gha-setup-ninja@master
     - name: check gcc
       run: gcc --version
+    - run: g++ --version
+    - run: echo {{$CC}}
+    - run: echo {{$CXX}}
     - name: Install Qt
       uses: jurplel/install-qt-action@v3.3.0
       with:
