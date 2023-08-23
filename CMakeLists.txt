@@ -3,8 +3,6 @@ project(QCodeEditor)
 
 # Set C++11 as the required standard
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
@@ -12,10 +10,6 @@ if (${BUILD_EXAMPLE})
     message(STATUS "QCodeEditor example will be built.")
     add_subdirectory(example)
 endif()
-
-set(RESOURCES_FILE
-    resources/qcodeeditor_resources.qrc
-)
 
 set(INCLUDE_FILES
     include/QHighlightRule
@@ -78,12 +72,14 @@ set(CMAKE_AUTOMOC On)
 set(CMAKE_AUTORCC ON)
 
 # Find includes in corresponding build directories
-find_package(Qt6Core    CONFIG REQUIRED)
-find_package(Qt6Widgets CONFIG REQUIRED)
-find_package(Qt6Gui     CONFIG REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets Gui)
+
+QT_ADD_RESOURCES(RESOURCE_FILES
+    resources/qcodeeditor_resources.qrc
+)
 
 add_library(QCodeEditor STATIC
-    ${RESOURCES_FILE}
+    ${RESOURCE_FILES}
     ${SOURCE_FILES}
     ${INCLUDE_FILES}
 )
@@ -105,7 +101,7 @@ target_compile_options(QCodeEditor
 )
 
 target_link_libraries(QCodeEditor
-    Qt::Core
-    Qt::Widgets
-    Qt::Gui
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::Gui
 )
