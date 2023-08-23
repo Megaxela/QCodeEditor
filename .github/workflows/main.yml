@@ -36,14 +36,10 @@ jobs:
         host: 'linux'
         target: 'desktop'
         arch: 'gcc_64'
-        install-deps: 'true'
         modules: 'qtnetworkauth'
-        archives: 'icu qtbase qtsvg qtgraphicaleffects qtimageformats'
-        cache: 'false'
-        cache-key-prefix: 'install-qt-action'
+        archives: 'icu qtbase qtsvg'
         aqtversion: '==3.1.*'
-        py7zrversion: '==0.20.*'
-        extra: '--external 7z'
+        tools: 'tools_cmake'
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
