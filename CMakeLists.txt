@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.6)
 project(QCodeEditor)
 
 # Set C++11 as the required standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(CMAKE_CXX_COMPILER, ${CMAKE_CXX_COMPILER} )
 message("C++ Standard Version: ${CMAKE_CXX_STANDARD}")
