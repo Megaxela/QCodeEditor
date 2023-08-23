@@ -16,6 +16,8 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v3
+    - name: essentials
+      run: sudo apt-get install build-essential
     - name: Install Qt
       uses: jurplel/install-qt-action@v3.3.0
       with:
