@@ -16,6 +16,11 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v3
+    - name: Install compiler
+      id: install_cc
+      uses: rlalik/setup-cpp-compiler@master
+      with:
+        compiler: latest
     - name: Ninja
       uses: seanmiddleditch/gha-setup-ninja@master
     - name: Install Qt
