@@ -1,13 +1,15 @@
-cmake_minimum_required(VERSION 3.6)
-project(QCodeEditor)
+cmake_minimum_required(VERSION 3.15)
+project(QCodeEditor CXX)
 
 # Set C++11 as the required standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(CMAKE_CXX_COMPILER, ${CMAKE_CXX_COMPILER} )
 message("C++ Standard Version: ${CMAKE_CXX_STANDARD}")
 message("C++ Standard CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+
+add_compile_options(-Wall -Wextra -pedantic -Werror)
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
@@ -15,6 +17,19 @@ if (${BUILD_EXAMPLE})
     message(STATUS "QCodeEditor example will be built.")
     add_subdirectory(example)
 endif()
+
+# Create code for QObjects
+set(CMAKE_AUTOMOC On)
+
+# Create code from resource files
+set(CMAKE_AUTORCC ON)
+
+# Find includes in corresponding build directories
+find_package(Qt6 COMPONENTS Core Widgets Gui)
+
+QT_ADD_RESOURCES(RESOURCE_FILES
+    resources/qcodeeditor_resources.qrc
+)
 
 set(INCLUDE_FILES
     include/QHighlightRule
@@ -70,39 +85,12 @@ set(SOURCE_FILES
     src/internal/QFramedTextAttribute.cpp
 )
 
-# Create code for QObjects
-set(CMAKE_AUTOMOC On)
-
-# Create code from resource files
-set(CMAKE_AUTORCC ON)
-
-# Find includes in corresponding build directories
-find_package(Qt6 COMPONENTS Core Widgets Gui)
-
-QT_ADD_RESOURCES(RESOURCE_FILES
-    resources/qcodeeditor_resources.qrc
-)
+include_directories(include)
 
 add_library(QCodeEditor STATIC
     ${RESOURCE_FILES}
-    ${SOURCE_FILES}
     ${INCLUDE_FILES}
-)
-
-target_include_directories(QCodeEditor PUBLIC
-    include
-)
-
-target_compile_options(QCodeEditor
-	PRIVATE
-	-ansi
-	-pedantic
-	-Wall
-	-Wextra
-	-Weffc++
-	-Woverloaded-virtual
-	-Winit-self
-	-Wunreachable-code
+    ${SOURCE_FILES}
 )
 
 target_link_libraries(QCodeEditor
