@@ -9,7 +9,7 @@ message(CMAKE_CXX_COMPILER, ${CMAKE_CXX_COMPILER} )
 message("C++ Standard Version: ${CMAKE_CXX_STANDARD}")
 message("C++ Standard CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
-add_compile_options(-Wall -Wextra -pedantic -Werror)
+add_compile_options(-Wall -Wextra -ansi -pedantic -Werror -Weffc++ -Woverloaded-virtual -Winit-self -Wunreachable-code)
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
