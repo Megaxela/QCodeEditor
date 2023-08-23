@@ -23,6 +23,8 @@ jobs:
         compiler: latest
     - name: Ninja
       uses: seanmiddleditch/gha-setup-ninja@master
+    - name: check gcc
+      run: gcc --version
     - name: Install Qt
       uses: jurplel/install-qt-action@v3.3.0
       with:
