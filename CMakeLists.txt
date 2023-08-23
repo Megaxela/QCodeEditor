@@ -92,7 +92,6 @@ target_include_directories(QCodeEditor PUBLIC
 if(CMAKE_COMPILER_IS_GNUCXX)
     target_compile_options(QCodeEditor
 		PRIVATE
-		-ansi
 		-pedantic
 		-Wall
 		-Wextra
