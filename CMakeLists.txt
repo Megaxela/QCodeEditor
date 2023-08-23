@@ -1,15 +1,7 @@
-cmake_minimum_required(VERSION 3.15)
-project(QCodeEditor CXX)
+cmake_minimum_required(VERSION 3.6)
+project(QCodeEditor)
 
-# Set C++11 as the required standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-message(CMAKE_CXX_COMPILER, ${CMAKE_CXX_COMPILER} )
-message("C++ Standard Version: ${CMAKE_CXX_STANDARD}")
-message("C++ Standard CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-
-add_compile_options(-Wall -Wextra -ansi -pedantic -Werror -Weffc++ -Woverloaded-virtual -Winit-self -Wunreachable-code)
+set(CMAKE_CXX_STANDARD 11)
 
 option(BUILD_EXAMPLE "Example building required" Off)
 
@@ -18,16 +10,7 @@ if (${BUILD_EXAMPLE})
     add_subdirectory(example)
 endif()
 
-# Create code for QObjects
-set(CMAKE_AUTOMOC On)
-
-# Create code from resource files
-set(CMAKE_AUTORCC ON)
-
-# Find includes in corresponding build directories
-find_package(Qt6 COMPONENTS Core Widgets Gui)
-
-QT_ADD_RESOURCES(RESOURCE_FILES
+set(RESOURCES_FILE
     resources/qcodeeditor_resources.qrc
 )
 
@@ -66,7 +49,6 @@ set(INCLUDE_FILES
     include/internal/QPythonHighlighter.hpp
     include/internal/QFramedTextAttribute.hpp
 )
-
 set(SOURCE_FILES
     src/internal/QCodeEditor.cpp
     src/internal/QLineNumberArea.cpp
@@ -85,16 +67,42 @@ set(SOURCE_FILES
     src/internal/QFramedTextAttribute.cpp
 )
 
-include_directories(include)
+# Create code for QObjects
+set(CMAKE_AUTOMOC On)
+
+# Create code from resource files
+set(CMAKE_AUTORCC ON)
+
+# Find includes in corresponding build directories
+find_package(Qt6Core    CONFIG REQUIRED)
+find_package(Qt6Widgets CONFIG REQUIRED)
+find_package(Qt6Gui     CONFIG REQUIRED)
 
 add_library(QCodeEditor STATIC
-    ${RESOURCE_FILES}
-    ${INCLUDE_FILES}
+    ${RESOURCES_FILE}
     ${SOURCE_FILES}
+    ${INCLUDE_FILES}
 )
 
+target_include_directories(QCodeEditor PUBLIC
+    include
+)
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    target_compile_options(QCodeEditor
+		PRIVATE
+		-pedantic
+		-Wall
+		-Wextra
+		-Weffc++
+		-Woverloaded-virtual
+		-Winit-self
+		-Wunreachable-code
+	)
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 target_link_libraries(QCodeEditor
-    Qt6::Core
-    Qt6::Widgets
-    Qt6::Gui
+    Qt::Core
+    Qt::Widgets
+    Qt::Gui
 )
