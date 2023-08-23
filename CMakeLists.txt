@@ -49,6 +49,7 @@ set(INCLUDE_FILES
     include/internal/QPythonHighlighter.hpp
     include/internal/QFramedTextAttribute.hpp
 )
+
 set(SOURCE_FILES
     src/internal/QCodeEditor.cpp
     src/internal/QLineNumberArea.cpp
