@@ -4,6 +4,8 @@ project(QCodeEditor)
 # Set C++11 as the required standard
 set(CMAKE_CXX_STANDARD 11)
 
+message(CMAKE_CXX_COMPILER, ${CMAKE_CXX_COMPILER})
+
 option(BUILD_EXAMPLE "Example building required" Off)
 
 if (${BUILD_EXAMPLE})
